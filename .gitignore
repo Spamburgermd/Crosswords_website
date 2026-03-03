@@ -1,0 +1,12 @@
+# Design assets (not for version control)
+Design_Elements_Donotcommit/
+
+# Claude AI session files
+.claude/
+
+# Node modules
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
