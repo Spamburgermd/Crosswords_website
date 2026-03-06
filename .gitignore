@@ -7,6 +7,9 @@ Design_Elements_Donotcommit/
 # Node modules
 node_modules/
 
+# Vite build output (Netlify builds from source)
+dist/
+
 # OS files
 .DS_Store
 Thumbs.db

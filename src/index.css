@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 /* ═══════════════════════════════════════════
    CSS RESET & VARIABLES
    ═══════════════════════════════════════════ */
@@ -358,31 +360,6 @@ img { display: block; max-width: 100%; }
 .divider-line {
   height: 1px;
   background: linear-gradient(to right, transparent, var(--border-light), transparent);
-}
-
-/* ═══════════════════════════════════════════
-   GAMEPLAY SCREENSHOT
-   ═══════════════════════════════════════════ */
-.screenshot-section {
-  padding: 80px 40px;
-  display: flex;
-  justify-content: center;
-  background: var(--dark);
-}
-
-.screenshot-frame {
-  max-width: 340px;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow:
-    0 40px 80px rgba(0, 0, 0, 0.5),
-    0 0 0 1px rgba(255, 255, 255, 0.05);
-}
-
-.screenshot-frame img {
-  width: 100%;
-  height: auto;
-  display: block;
 }
 
 /* ═══════════════════════════════════════════
@@ -806,9 +783,6 @@ img { display: block; max-width: 100%; }
   .hero-ctas { justify-content: flex-start; }
   .hero-right { order: -1; }
   .phone-mockup { width: 240px; height: 480px; }
-
-  .screenshot-section { padding: 60px 20px; }
-  .screenshot-frame { max-width: 300px; }
 
   .how-it-works,
   .modes,
