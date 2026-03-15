@@ -1,6 +1,7 @@
 export default function Footer() {
   return (
     <footer className="site-footer">
+      <div className="site-footer-inner">
       <div className="footer-inner">
         <div className="footer-brand">
           <div className="footer-abd-logo">
@@ -16,6 +17,7 @@ export default function Footer() {
           <div className="footer-legal">&copy; 2026 Artisan Beef Designs</div>
           <div className="footer-disclaimer">Not affiliated with Wordle or The New York Times.</div>
         </div>
+      </div>
       </div>
     </footer>
   );

@@ -8,41 +8,42 @@ export default function Hero() {
   return (
     <section className="hero" id="hero">
       <div className="hero-inner">
-        <div className="hero-left">
-          <div className="hero-title-row">
-            <h1 className="hero-title">
-              Cros<span className="red">S</span>word<span className="red">S</span>
-            </h1>
-            <div className="hero-motif">
-              <img src="/assets/icons/cw-motif-red.png" alt="CrosSwordS motif" />
-            </div>
-          </div>
-          <div className="hero-tagline">Deduce the Grid</div>
-          <p className="hero-pitch">Wordle meets the grid. No clues &mdash; just letters and deduction.</p>
-          <div className="hero-ctas">
-            <a href="#download" className="btn-primary">
-              <GooglePlayIcon />
-              Google Play
-            </a>
-            <span className="btn-secondary">iOS &mdash; Coming Soon</span>
-          </div>
-          <div className="hero-attribution">by Artisan Beef Designs</div>
+
+        {/* Large red circular motif — mirrors the game splash screen */}
+        <div className="hero-motif">
+          <img src="/assets/icons/cw-motif-red.png" alt="CrosSwordS motif" />
         </div>
-        <div className="hero-right">
-          <div>
-            <div className="phone-mockup">
-              <div className="phone-notch"></div>
-              <div className="phone-screen">
-                <img src="/assets/screenshots/dark-mode-bot.jpg" alt="CrosSwordS gameplay" />
-              </div>
-            </div>
-            <div className="phone-dots">
-              <div className="phone-dot"></div>
-              <div className="phone-dot"></div>
-              <div className="phone-dot"></div>
-            </div>
-          </div>
+
+        {/* Calligraphic wordmark — white bg blends with page */}
+        <div className="hero-wordmark">
+          <img src="/assets/icons/CrosswordsBlackRedBent90.png" alt="CrosSwordS" />
         </div>
+
+        {/* Three dots — echo the splash screen pager */}
+        <div className="hero-dots">
+          <div className="hero-dot"></div>
+          <div className="hero-dot"></div>
+          <div className="hero-dot"></div>
+        </div>
+
+        <div className="hero-tagline">Deduce the Grid</div>
+
+        <p className="hero-pitch">No clues &mdash; just letters and deduction.</p>
+
+        <div className="hero-ctas">
+          <a href="#download" className="btn-primary">
+            <GooglePlayIcon />
+            Google Play
+          </a>
+          <span className="btn-secondary">iOS &mdash; Coming Soon</span>
+        </div>
+
+        {/* Attribution with burger logo — mirrors bottom of splash screen */}
+        <div className="hero-attribution">
+          <img src="/assets/icons/abd-burger-blue.png" alt="Artisan Beef Designs logo" />
+          <span>Artisan Beef Designs</span>
+        </div>
+
       </div>
     </section>
   );

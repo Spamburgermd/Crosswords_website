@@ -1,6 +1,5 @@
 import Nav from './components/Nav'
 import Hero from './components/Hero'
-import { Component as ScreenshotShowcase } from '@/components/ui/connoisseur-stack-interactor'
 import HowItWorks from './components/HowItWorks'
 import GameModes from './components/GameModes'
 import WhyDifferent from './components/WhyDifferent'
@@ -20,8 +19,6 @@ export default function App() {
     <>
       <Nav />
       <Hero />
-      <Divider />
-      <ScreenshotShowcase className="!bg-[#0a0a0a]" />
       <Divider />
       <HowItWorks />
       <Divider />
