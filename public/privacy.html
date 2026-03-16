@@ -7,57 +7,243 @@
   <link rel="icon" type="image/png" href="assets/icons/cw-motif-red-nolines.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Oswald:wght@300;400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --red: #E7131A;
+      --bg: #ffffff;
+      --bg-surface: #f7f7f7;
+      --border: #e5e5e5;
+      --text-primary: #0a0a0a;
+      --text-secondary: #555555;
+      --text-muted: #999999;
+      --font-display: 'Cinzel Decorative', serif;
+      --font-serif: 'Libre Baskerville', serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: var(--font-serif);
+      overflow-x: hidden;
+    }
+
+    body { overflow-x: hidden; }
+
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* NAV */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 40px;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 1px 16px rgba(0, 0, 0, 0.07);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-wordmark {
+      height: 32px;
+      width: auto;
+      display: block;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .nav-links a {
+      font-family: var(--font-body);
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      transition: color 0.25s;
+    }
+
+    .nav-links a:hover { color: var(--text-primary); }
+
+    /* PRIVACY PAGE */
     .privacy-page {
       max-width: 720px;
       margin: 0 auto;
-      padding: 140px 40px 80px;
+      padding: 120px 40px 80px;
     }
+
     .privacy-page h1 {
-      font-family: var(--font-display);
-      font-size: 36px;
-      font-weight: 600;
-      text-transform: uppercase;
-      margin-bottom: 12px;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--text-primary);
     }
+
     .privacy-page .effective-date {
-      font-family: var(--font-mono);
+      font-family: var(--font-body);
       font-size: 11px;
       letter-spacing: 1.5px;
       text-transform: uppercase;
       color: var(--text-muted);
       margin-bottom: 48px;
     }
+
     .privacy-page h2 {
-      font-family: var(--font-display);
-      font-size: 20px;
+      font-family: var(--font-body);
+      font-size: 11px;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 2px;
+      color: var(--text-muted);
       margin-top: 40px;
       margin-bottom: 12px;
+      border-top: 1px solid var(--border);
+      padding-top: 32px;
     }
+
     .privacy-page p {
       font-family: var(--font-serif);
-      font-size: 16px;
+      font-size: 15px;
       line-height: 1.8;
       color: var(--text-secondary);
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
+
+    .privacy-page ul {
+      font-family: var(--font-serif);
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--text-secondary);
+      margin-bottom: 14px;
+      padding-left: 24px;
+    }
+
+    .privacy-page ul li {
+      margin-bottom: 4px;
+    }
+
     .privacy-page a {
       color: var(--red);
       text-decoration: underline;
+    }
+
+    .brand {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.9em;
+    }
+
+    .brand .s { color: #E7131A; }
+
+    /* FOOTER */
+    .site-footer {
+      padding: 48px 40px 32px;
+      border-top: 1px solid var(--border);
+      background: var(--bg-surface);
+    }
+
+    .footer-inner {
+      max-width: 720px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .footer-brand img {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+    }
+
+    .footer-brand span {
+      font-family: var(--font-body);
+      font-size: 10px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .footer-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      font-family: var(--font-body);
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      transition: color 0.25s;
+    }
+
+    .footer-links a:hover { color: var(--text-secondary); }
+
+    .footer-legal {
+      font-family: var(--font-body);
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      text-align: right;
+    }
+
+    .footer-disclaimer {
+      font-family: var(--font-body);
+      font-size: 9px;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      opacity: 0.7;
+      text-align: right;
+    }
+
+    @media (max-width: 600px) {
+      .nav { padding: 12px 20px; }
+      .nav-brand-text { display: none; }
+      .privacy-page { padding: 100px 20px 60px; }
+      .privacy-page h1 { font-size: 24px; }
+      .footer-inner { flex-direction: column; gap: 20px; align-items: center; }
+      .footer-right { align-items: center; }
+      .footer-legal, .footer-disclaimer { text-align: center; }
     }
   </style>
 </head>
 <body>
 
-<nav class="nav scrolled" id="nav">
+<nav class="nav">
   <a href="index.html" class="nav-brand">
-    <img src="assets/icons/cw-motif-red.png" alt="CrosSwordS">
-    <span class="nav-brand-text">Cros<span class="red">S</span>word<span class="red">S</span></span>
+    <img src="assets/icons/CrosswordsBlackRedBent90.png" alt="CrosSwordS" class="nav-wordmark">
   </a>
   <div class="nav-links">
     <a href="index.html">Home</a>
@@ -66,32 +252,97 @@
 
 <main class="privacy-page">
   <h1>Privacy Policy</h1>
-  <div class="effective-date">Effective Date: March 2, 2026</div>
+  <div class="effective-date">Effective Date: March 16, 2026</div>
 
-  <h2>Data Collection</h2>
-  <p>CrosSwordS does not collect, store, or transmit any personal data. The app runs entirely on your device. No accounts are required and no user information is gathered.</p>
+  <p>This Privacy Policy explains how <span class="brand">Cro<span class="s">S</span>word<span class="s">S</span></span> handles information when you use the mobile app.</p>
 
-  <h2>Analytics</h2>
-  <p>CrosSwordS does not use any analytics or tracking services. We do not monitor how you use the app.</p>
+  <h2>Summary</h2>
+  <p>The current production version of <span class="brand">Cro<span class="s">S</span>word<span class="s">S</span></span> is designed to operate in offline/local mode.</p>
+  <p>In the current production build:</p>
+  <ul>
+    <li>the app does not require account creation</li>
+    <li>the app does not include advertising SDKs</li>
+    <li>the app does not include analytics SDKs</li>
+    <li>the app does not include crash reporting SDKs</li>
+    <li>the app does not use in-app purchases or subscriptions</li>
+    <li>the app does not collect or transmit personal information to our servers during normal offline/local gameplay</li>
+  </ul>
 
-  <h2>Advertising</h2>
-  <p>CrosSwordS contains no advertisements. There are no ad networks or tracking pixels in the app.</p>
+  <h2>Information Stored on Your Device</h2>
+  <p><span class="brand">Cro<span class="s">S</span>word<span class="s">S</span></span> stores some information locally on your device so the app can function properly. This may include:</p>
+  <ul>
+    <li>app preferences, such as selected dictionary and tutorial completion state</li>
+    <li>local gameplay state and game settings</li>
+    <li>locally generated challenge or share codes</li>
+    <li>local stats or progress related to offline play</li>
+  </ul>
+  <p>This local data stays on your device unless you choose to remove the app or clear app data.</p>
 
-  <h2>Purchases</h2>
-  <p>CrosSwordS is a one-time purchase through Google Play. All billing is handled by Google Play. We do not process or store any payment information.</p>
+  <h2>Clipboard Access</h2>
+  <p>The app may read text currently stored on your device clipboard in order to detect a <span class="brand">Cro<span class="s">S</span>word<span class="s">S</span></span> challenge code, response code, result code, or similar game code and help you import it more easily.</p>
+  <p>This clipboard check is performed locally on your device. Clipboard contents are not transmitted to us as part of the current production build's normal offline/local gameplay flow.</p>
+  <p>The app may also copy game codes to your clipboard when you choose to share or export them.</p>
+
+  <h2>Information We Do Not Collect in the Current Production Build</h2>
+  <p>In the current production build, <span class="brand">Cro<span class="s">S</span>word<span class="s">S</span></span> does not collect or transmit the following during normal offline/local use:</p>
+  <ul>
+    <li>your name</li>
+    <li>your email address</li>
+    <li>your phone number</li>
+    <li>your contacts</li>
+    <li>your precise location</li>
+    <li>your photos, files, or messages</li>
+    <li>payment information</li>
+    <li>advertising identifiers for ad targeting</li>
+  </ul>
+
+  <h2>Network Features</h2>
+  <p>The current production build of <span class="brand">Cro<span class="s">S</span>word<span class="s">S</span></span> is configured with server-backed features disabled.</p>
+  <p>That means the production build submitted to Google Play does not normally send gameplay, login, friend, or matchmaking data to a backend service.</p>
+  <p>If a future version enables online features, this Privacy Policy will be updated before or when those features are released.</p>
+
+  <h2>Optional Device Features</h2>
+  <p>The app may provide device-assisted actions such as copying text or opening your SMS composer to share a challenge code. These actions are initiated by you.</p>
+  <p><span class="brand">Cro<span class="s">S</span>word<span class="s">S</span></span> does not read your SMS messages or contacts as part of these actions.</p>
+
+  <h2>Notifications</h2>
+  <p>The current production build does not use push notification services.</p>
+  <p>If a future version adds notifications, this Privacy Policy will be updated accordingly.</p>
+
+  <h2>Children</h2>
+  <p><span class="brand">Cro<span class="s">S</span>word<span class="s">S</span></span> is not directed to children under 13 as a standalone child-focused service. If this changes in a future release, the privacy disclosures and age-targeting settings will be updated accordingly.</p>
+
+  <h2>Data Retention</h2>
+  <p>Because the current production build primarily stores data locally on your device, data is generally retained until:</p>
+  <ul>
+    <li>you delete it in the app, if that option is provided</li>
+    <li>you clear app storage</li>
+    <li>or you uninstall the app</li>
+  </ul>
+
+  <h2>Security</h2>
+  <p>We aim to reduce unnecessary data collection and keep the current production build limited to local/offline functionality. However, no method of storage or transmission is guaranteed to be perfectly secure.</p>
+
+  <h2>Changes to This Policy</h2>
+  <p>We may update this Privacy Policy from time to time. If we make material changes, we will update the effective date above.</p>
 
   <h2>Contact</h2>
-  <p>If you have questions about this privacy policy, contact us at <a href="mailto:contact@artisanbeefdesigns.com">contact@artisanbeefdesigns.com</a>.</p>
+  <p>If you have questions about this Privacy Policy, contact us at <a href="mailto:artisanbeefdesigns@gmail.com">artisanbeefdesigns@gmail.com</a>.</p>
 </main>
 
 <footer class="site-footer">
   <div class="footer-inner">
     <div class="footer-brand">
-      <img src="assets/icons/cw-motif-red-nolines.png" alt="CrosSwordS">
+      <img src="assets/icons/abd-burger-blue.png" alt="Artisan Beef Designs">
       <span>Artisan Beef Designs</span>
     </div>
     <div class="footer-right">
+      <div class="footer-links">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="mailto:artisanbeefdesigns@gmail.com">Contact</a>
+      </div>
       <div class="footer-legal">&copy; 2026 Artisan Beef Designs</div>
+      <div class="footer-disclaimer">Not affiliated with Wordle or The New York Times.</div>
     </div>
   </div>
 </footer>
