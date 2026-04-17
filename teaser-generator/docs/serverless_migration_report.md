@@ -1,7 +1,0 @@
-- 2026-02-12 11:05 PT — Fixed mode-aware board unlock gate after UI restore (Solo/Bot now unlock when geometry present; PvP unchanged); Atlantic preserved; no package changes.
-- 2026-02-12 11:25 PT — Solo/Bot guess submission now forced local (no network), PvP unchanged; OFFLINE_LOCAL_ONLY safe.
-- 2026-02-12 11:40 PT — Solo/Bot guess results are now persisted locally (no network); feedback renders immediately in offline/serverless modes; PvP unchanged; no package changes; Atlantic preserved.
-- 2026-02-12 11:55 PT — Fixed Solo/Bot guess submission: local mode no longer requires active gameId, scores locally, and persists guess results so feedback shows; PvP unchanged; no package changes.
-- 2026-02-12 12:05 PT — Aligned local guess storage ids so Solo/Bot feedback displays (local gameId now matches history lookups); PvP unchanged; no package changes.
-- 2026-02-12 12:18 PT — Added localSession guess fallback so Solo/Bot feedback renders even if local guess cache is mismatched; PvP unchanged.
-- 2026-02-12 12:32 PT — Local modes now render guesses from session state only (deduped), fixing double rows and inconsistent feedback; PvP unchanged.

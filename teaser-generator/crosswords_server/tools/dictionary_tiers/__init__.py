@@ -1,1 +1,0 @@
-"""Tiered dictionary build tool."""
