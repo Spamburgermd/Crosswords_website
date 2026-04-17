@@ -1,0 +1,50 @@
+[
+  {
+    "name": "all-hit",
+    "targetWords": ["APPLE", "BERRY"],
+    "targetIndex": 0,
+    "guessWord": "APPLE",
+    "rules": { "smartBlue": true },
+    "expectedCodes": ["green", "green", "green", "green", "green"]
+  },
+  {
+    "name": "all-miss",
+    "targetWords": ["APPLE", "BERRY"],
+    "targetIndex": 0,
+    "guessWord": "CLOUD",
+    "rules": { "smartBlue": true },
+    "expectedCodes": ["grey", "yellow", "grey", "grey", "grey"]
+  },
+  {
+    "name": "mixed-green-yellow",
+    "targetWords": ["BRICK", "STONE"],
+    "targetIndex": 0,
+    "guessWord": "CREEK",
+    "rules": { "smartBlue": true },
+    "expectedCodes": ["yellow", "green", "blue", "blue", "green"]
+  },
+  {
+    "name": "duplicate-letters",
+    "targetWords": ["LETTER", "BLAZE"],
+    "targetIndex": 0,
+    "guessWord": "SETTER",
+    "rules": { "smartBlue": true },
+    "expectedCodes": ["grey", "green", "green", "green", "green", "green"]
+  },
+  {
+    "name": "blue-letter-other-target",
+    "targetWords": ["CANDY", "BEEPS"],
+    "targetIndex": 0,
+    "guessWord": "BEZZA",
+    "rules": { "smartBlue": true },
+    "expectedCodes": ["blue", "blue", "grey", "grey", "yellow"]
+  },
+  {
+    "name": "smartBlue-consumption",
+    "targetWords": ["CANDY", "BORKS"],
+    "targetIndex": 0,
+    "guessWord": "BBDDD",
+    "rules": { "smartBlue": true },
+    "expectedCodes": ["blue", "blue", "grey", "green", "grey"]
+  }
+]

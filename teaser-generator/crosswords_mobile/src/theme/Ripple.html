@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Water Ripple</title>
+  <style>
+    /* Full-screen canvas for the pond */
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: #00131c;
+      font-family: system-ui, sans-serif;
+    }
+
+    .pond-container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      /* Deep water with a slow-shifting gradient to feel alive */
+      background: radial-gradient(circle at 50% 45%, #044966, #002034 65%, #000b14);
+      animation: drift 16s ease-in-out infinite alternate;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    /* Subtle moving highlights to suggest surface shimmer */
+    .pond-container::before,
+    .pond-container::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.04), transparent 35%),
+                  radial-gradient(circle at 70% 70%, rgba(255, 255, 255, 0.03), transparent 30%);
+      mix-blend-mode: screen;
+      animation: shimmer 18s linear infinite;
+      pointer-events: none;
+    }
+    .pond-container::after {
+      animation-duration: 22s;
+      animation-direction: reverse;
+    }
+
+    /* One ripple group holds several rings that expand and fade */
+    .ripple {
+      position: absolute;
+      width: var(--size, 120px);
+      height: var(--size, 120px);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      filter: blur(0.4px);
+    }
+
+    .ripple span {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
+      animation: ring 2.8s ease-out forwards;
+      transform-origin: center;
+    }
+
+    /* Stagger rings for the “waves radiating” effect */
+    .ripple span:nth-child(2) { animation-delay: 0.25s; opacity: 0.75; }
+    .ripple span:nth-child(3) { animation-delay: 0.5s;  opacity: 0.55; }
+
+    @keyframes ring {
+      0%   { transform: scale(0.1); opacity: 0.9; }
+      60%  { opacity: 0.45; }
+      100% { transform: scale(3.8); opacity: 0; }
+    }
+
+    @keyframes drift {
+      0%   { background-position: 0% 0%; }
+      100% { background-position: 6% 4%; }
+    }
+
+    @keyframes shimmer {
+      0%   { transform: translate3d(-2%, -1%, 0) scale(1.02); }
+      50%  { transform: translate3d(1%, 2%, 0) scale(1.00); }
+      100% { transform: translate3d(-2%, -1%, 0) scale(1.02); }
+    }
+  </style>
+</head>
+<body>
+  <div class="pond-container" id="pond"></div>
+
+  <script>
+    /**
+     * createRipple
+     * ------------
+     * Spawns a ripple at the given coordinates with three staggered rings.
+     * The element cleans itself up after the animation finishes.
+     */
+    function createRipple(x, y) {
+      const pond = document.getElementById('pond');
+      const ripple = document.createElement('div');
+      ripple.className = 'ripple';
+
+      // Randomize base size slightly so ripples feel organic
+      const base = 110 + Math.random() * 40;
+      ripple.style.setProperty('--size', `${base}px`);
+      ripple.style.left = `${x}px`;
+      ripple.style.top = `${y}px`;
+
+      // Build three concentric rings
+      ripple.appendChild(document.createElement('span'));
+      ripple.appendChild(document.createElement('span'));
+      ripple.appendChild(document.createElement('span'));
+
+      pond.appendChild(ripple);
+
+      // Remove after animation completes
+      setTimeout(() => ripple.remove(), 3000);
+    }
+
+    // Click or tap to make ripples
+    document.addEventListener('click', (e) => createRipple(e.clientX, e.clientY));
+    document.addEventListener('touchstart', (e) => {
+      const touch = e.touches[0];
+      createRipple(touch.clientX, touch.clientY);
+    });
+
+    // Optional: start with a gentle central ripple
+    window.addEventListener('load', () => {
+      const { innerWidth, innerHeight } = window;
+      createRipple(innerWidth / 2, innerHeight / 2);
+    });
+  </script>
+</body>
+</html>

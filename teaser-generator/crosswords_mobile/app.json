@@ -1,0 +1,45 @@
+{
+  "expo": {
+    "name": "CrosSwords",
+    "slug": "crosswords-mobile",
+    "version": "2.1",
+    "android": {
+      "versionCode": 35,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon-foreground.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.cmbur.crosswords"
+    },
+    "icon": "./assets/icon-1024.png",
+    "orientation": "default",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "backgroundColor": "#101935"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.cmbur.crosswords",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "scheme": "crosswords",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "plugins": [
+      "expo-font",
+      "expo-screen-orientation"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "d3b6896e-63d4-42c9-8f8d-6ddb92b0e988"
+      }
+    }
+  }
+}

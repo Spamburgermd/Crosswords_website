@@ -1,0 +1,8 @@
+.pytest_basetemp
+.pytest_tmp
+.pytest_cache
+.ptmp
+.tmp_pytest
+crosswords_server
+tmp*
+/Users*

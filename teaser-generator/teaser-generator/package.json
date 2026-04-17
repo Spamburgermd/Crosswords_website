@@ -1,0 +1,17 @@
+{
+  "name": "teaser-generator",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test-pipeline": "tsx src/test-pipeline.ts",
+    "generate": "tsx src/generate.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "canvas": "^3.2.3"
+  }
+}

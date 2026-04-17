@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CROSSWORDS Brand Preview</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&family=Libre+Baskerville:wght@400;700&family=Cinzel+Decorative:wght@700&family=Noto+Serif:wght@400;700&family=Oswald:wght@400;500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: #f5f5f5; padding: 40px; }
+  h1 { text-align: center; margin-bottom: 32px; font-size: 1.4rem; color: #333; }
+  .row { display: flex; gap: 32px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
+  .card {
+    background: #fff; border: 1px solid #e0e0e0; border-radius: 12px;
+    padding: 32px 24px; text-align: center; min-width: 320px;
+  }
+  .label { font-size: 0.75rem; color: #999; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px; }
+  .dark-card {
+    background: #1c1b21; border-color: #333;
+  }
+  .dark-card .label { color: #666; }
+
+  /* Current: black text */
+  .brand-current {
+    font-family: 'Inter', sans-serif; font-weight: 700; font-size: 18px;
+    letter-spacing: 1px; color: #000;
+  }
+
+  /* Option A: White text with black outline via text-stroke */
+  .brand-outline {
+    font-family: 'Inter', sans-serif; font-weight: 800; font-size: 18px;
+    letter-spacing: 1px; color: #fff;
+    -webkit-text-stroke: 1.5px #000;
+    paint-order: stroke fill;
+  }
+
+  /* Option A2: thicker stroke */
+  .brand-outline-thick {
+    font-family: 'Inter', sans-serif; font-weight: 800; font-size: 18px;
+    letter-spacing: 1px; color: #fff;
+    -webkit-text-stroke: 2px #1c1b21;
+    paint-order: stroke fill;
+  }
+
+  /* Option B: Dark pill behind white text */
+  .brand-pill {
+    display: inline-block;
+    font-family: 'Inter', sans-serif; font-weight: 700; font-size: 16px;
+    letter-spacing: 1.5px; color: #fff;
+    background: #1c1b21; padding: 6px 14px; border-radius: 4px;
+  }
+
+  /* Option C: White text with shadow */
+  .brand-shadow {
+    font-family: 'Inter', sans-serif; font-weight: 800; font-size: 18px;
+    letter-spacing: 1px; color: #fff;
+    text-shadow:
+      -1px -1px 0 #000, 1px -1px 0 #000,
+      -1px  1px 0 #000, 1px  1px 0 #000,
+       0   -1px 0 #000, 0    1px 0 #000,
+      -1px  0   0 #000, 1px  0   0 #000;
+  }
+
+  /* Option D: Ink-colored text (dark brown from palette) */
+  .brand-ink {
+    font-family: 'Inter', sans-serif; font-weight: 700; font-size: 18px;
+    letter-spacing: 1px; color: #1c1b21;
+  }
+
+  .red { color: #E7131A !important; -webkit-text-stroke-color: #E7131A; }
+
+  /* For outline versions, red S needs special treatment */
+  .brand-outline .red, .brand-outline-thick .red, .brand-shadow .red {
+    color: #E7131A; -webkit-text-stroke-color: #E7131A;
+  }
+</style>
+</head>
+<body>
+
+<h1>CROSSWORDS Brand — White Background Options</h1>
+
+<div class="row">
+  <div class="card">
+    <div class="label">Current (Black on White)</div>
+    <span class="brand-current">CROS<span class="red">S</span>WORD<span class="red">S</span></span>
+  </div>
+
+  <div class="card">
+    <div class="label">A — White + Black Outline (thin)</div>
+    <span class="brand-outline">CROS<span class="red">S</span>WORD<span class="red">S</span></span>
+  </div>
+
+  <div class="card">
+    <div class="label">A2 — White + Black Outline (thick)</div>
+    <span class="brand-outline-thick">CROS<span class="red">S</span>WORD<span class="red">S</span></span>
+  </div>
+
+  <div class="card">
+    <div class="label">B — Dark Pill Background</div>
+    <span class="brand-pill">CROS<span class="red">S</span>WORD<span class="red">S</span></span>
+  </div>
+
+  <div class="card">
+    <div class="label">C — White + Multi-Shadow Outline</div>
+    <span class="brand-shadow">CROS<span class="red">S</span>WORD<span class="red">S</span></span>
+  </div>
+</div>
+
+<h1>Font & Weight Variations — White/Red on White BG</h1>
+<p style="text-align:center;color:#888;font-size:0.8rem;margin-bottom:24px;">Your current fonts + Oswald, across weights</p>
+
+<div class="row">
+  <!-- Inter (current display font) -->
+  <div class="card">
+    <div class="label">Inter 500 (body weight)</div>
+    <span style="font-family:'Inter';font-weight:500;font-size:18px;letter-spacing:1px;color:#fff;text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000,0 -1px 0 #000,0 1px 0 #000,-1px 0 0 #000,1px 0 0 #000;">CROS<span class="red">S</span>WORD<span class="red">S</span></span>
+  </div>
+  <div class="card">
+    <div class="label">Inter 600 SemiBold (current display)</div>
+    <span style="font-family:'Inter';font-weight:600;font-size:18px;letter-spacing:1px;color:#fff;text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000,0 -1px 0 #000,0 1px 0 #000,-1px 0 0 #000,1px 0 0 #000;">CROS<span class="red">S</span>WORD<span class="red">S</span></span>
+  </div>
+  <div class="card">
+    <div class="label">Inter 700 Bold</div>
+    <span style="font-family:'Inter';font-weight:700;font-size:18px;letter-spacing:1px;color:#fff;text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000,0 -1px 0 #000,0 1px 0 #000,-1px 0 0 #000,1px 0 0 #000;">CROS<span class="red">S</span>WORD<span class="red">S</span></span>
+  </div>
+  <div class="card">
+    <div class="label">Inter 800 ExtraBold</div>
+    <span style="font-family:'Inter';font-weight:800;font-size:18px;letter-spacing:1px;color:#fff;text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000,0 -1px 0 #000,0 1px 0 #000,-1px 0 0 #000,1px 0 0 #000;">CROS<span class="red">S</span>WORD<span class="red">S</span></span>
+  </div>
+  <div class="card">
+    <div class="label">Inter 900 Black</div>
+    <span style="font-family:'Inter';font-weight:900;font-size:18px;letter-spacing:1px;color:#fff;text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000,0 -1px 0 #000,0 1px 0 #000,-1px 0 0 #000,1px 0 0 #000;">CROS<span class="red">S</span>WORD<span class="red">S</span></span>
+  </div>
+</div>
+
+<div class="row">
+  <!-- Libre Baskerville (classic body font) -->
+  <div class="card">
+    <div class="label">Libre Baskerville 400</div>
+    <span style="font-family:'Libre Baskerville',serif;font-weight:400;font-size:18px;letter-spacing:1px;color:#fff;text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000,0 -1px 0 #000,0 1px 0 #000,-1px 0 0 #000,1px 0 0 #000;">CROS<span class="red">S</span>WORD<span class="red">S</span></span>
+  </div>
+  <div class="card">
+    <div class="label">Libre Baskerville 700 Bold</div>
+    <span style="font-family:'Libre Baskerville',serif;font-weight:700;font-size:18px;letter-spacing:1px;color:#fff;text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000,0 -1px 0 #000,0 1px 0 #000,-1px 0 0 #000,1px 0 0 #000;">CROS<span class="red">S</span>WORD<span class="red">S</span></span>
+  </div>
+  <!-- Cinzel Decorative -->
+  <div class="card">
+    <div class="label">Cinzel Decorative 700 (classic display)</div>
+    <span style="font-family:'Cinzel Decorative',serif;font-weight:700;font-size:18px;letter-spacing:1px;color:#fff;text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000,0 -1px 0 #000,0 1px 0 #000,-1px 0 0 #000,1px 0 0 #000;">CROS<span class="red">S</span>WORD<span class="red">S</span></span>
+  </div>
+  <!-- Noto Serif -->
+  <div class="card">
+    <div class="label">Noto Serif 400</div>
+    <span style="font-family:'Noto Serif',serif;font-weight:400;font-size:18px;letter-spacing:1px;color:#fff;text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000,0 -1px 0 #000,0 1px 0 #000,-1px 0 0 #000,1px 0 0 #000;">CROS<span class="red">S</span>WORD<span class="red">S</span></span>
+  </div>
+  <div class="card">
+    <div class="label">Noto Serif 700 Bold</div>
+    <span style="font-family:'Noto Serif',serif;font-weight:700;font-size:18px;letter-spacing:1px;color:#fff;text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000,0 -1px 0 #000,0 1px 0 #000,-1px 0 0 #000,1px 0 0 #000;">CROS<span class="red">S</span>WORD<span class="red">S</span></span>
+  </div>
+</div>
+
+<div class="row">
+  <!-- Oswald -->
+  <div class="card">
+    <div class="label">Oswald 400 Regular</div>
+    <span style="font-family:'Oswald',sans-serif;font-weight:400;font-size:18px;letter-spacing:1px;color:#fff;text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000,0 -1px 0 #000,0 1px 0 #000,-1px 0 0 #000,1px 0 0 #000;">CROS<span class="red">S</span>WORD<span class="red">S</span></span>
+  </div>
+  <div class="card">
+    <div class="label">Oswald 500 Medium</div>
+    <span style="font-family:'Oswald',sans-serif;font-weight:500;font-size:18px;letter-spacing:1px;color:#fff;text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000,0 -1px 0 #000,0 1px 0 #000,-1px 0 0 #000,1px 0 0 #000;">CROS<span class="red">S</span>WORD<span class="red">S</span></span>
+  </div>
+  <div class="card">
+    <div class="label">Oswald 600 SemiBold</div>
+    <span style="font-family:'Oswald',sans-serif;font-weight:600;font-size:18px;letter-spacing:1px;color:#fff;text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000,0 -1px 0 #000,0 1px 0 #000,-1px 0 0 #000,1px 0 0 #000;">CROS<span class="red">S</span>WORD<span class="red">S</span></span>
+  </div>
+  <div class="card">
+    <div class="label">Oswald 700 Bold</div>
+    <span style="font-family:'Oswald',sans-serif;font-weight:700;font-size:18px;letter-spacing:1px;color:#fff;text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000,0 -1px 0 #000,0 1px 0 #000,-1px 0 0 #000,1px 0 0 #000;">CROS<span class="red">S</span>WORD<span class="red">S</span></span>
+  </div>
+</div>
+
+<h1>Same Fonts — Black/Red on White (no outline, for reference)</h1>
+
+<div class="row">
+  <div class="card">
+    <div class="label">Inter 700</div>
+    <span style="font-family:'Inter';font-weight:700;font-size:18px;letter-spacing:1px;color:#000;">CROS<span class="red">S</span>WORD<span class="red">S</span></span>
+  </div>
+  <div class="card">
+    <div class="label">Inter 900</div>
+    <span style="font-family:'Inter';font-weight:900;font-size:18px;letter-spacing:1px;color:#000;">CROS<span class="red">S</span>WORD<span class="red">S</span></span>
+  </div>
+  <div class="card">
+    <div class="label">Libre Baskerville 700</div>
+    <span style="font-family:'Libre Baskerville',serif;font-weight:700;font-size:18px;letter-spacing:1px;color:#000;">CROS<span class="red">S</span>WORD<span class="red">S</span></span>
+  </div>
+  <div class="card">
+    <div class="label">Cinzel Decorative 700</div>
+    <span style="font-family:'Cinzel Decorative',serif;font-weight:700;font-size:18px;letter-spacing:1px;color:#000;">CROS<span class="red">S</span>WORD<span class="red">S</span></span>
+  </div>
+  <div class="card">
+    <div class="label">Oswald 600</div>
+    <span style="font-family:'Oswald',sans-serif;font-weight:600;font-size:18px;letter-spacing:1px;color:#000;">CROS<span class="red">S</span>WORD<span class="red">S</span></span>
+  </div>
+  <div class="card">
+    <div class="label">Oswald 700</div>
+    <span style="font-family:'Oswald',sans-serif;font-weight:700;font-size:18px;letter-spacing:1px;color:#000;">CROS<span class="red">S</span>WORD<span class="red">S</span></span>
+  </div>
+</div>
+
+<h1>On Dark Background (for comparison)</h1>
+
+<div class="row">
+  <div class="card dark-card">
+    <div class="label">Current Dark Mode</div>
+    <span class="brand-current" style="color:#f2f2f2">CROS<span class="red">S</span>WORD<span class="red">S</span></span>
+  </div>
+
+  <div class="card dark-card">
+    <div class="label">A — Outline on Dark</div>
+    <span class="brand-outline" style="-webkit-text-stroke-color:#f2f2f2">CROS<span class="red">S</span>WORD<span class="red">S</span></span>
+  </div>
+
+  <div class="card dark-card">
+    <div class="label">B — Pill on Dark</div>
+    <span class="brand-pill" style="background:#f2f2f2;color:#1c1b21">CROS<span class="red">S</span>WORD<span class="red">S</span></span>
+  </div>
+</div>
+
+<div style="margin-top: 32px; text-align: center; color: #888; font-size: 0.8rem;">
+  <p><strong>Note:</strong> React Native doesn't support CSS text-stroke natively.</p>
+  <p>Option A/C would need multiple offset &lt;Text&gt; shadows. Option B (pill) is simplest to implement.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     GAME MODES — Atlantic Design System
+     Fonts: Libre Baskerville (display), Noto Serif (body)
+     Sharp corners, 1px borders, CWMotif icon, #E7131A red
+     ═══════════════════════════════════════════════════════════ -->
+
+<style>
+  /* ── Atlantic base ──────────────────────────────────── */
+  .atlantic-section { background: #fdfdfd; padding: 32px 24px; margin-bottom: 40px; }
+  .atlantic-section.dark-bg { background: #121212; }
+  .atlantic-section h2 {
+    font-family: 'Libre Baskerville', serif; font-size: 18px;
+    padding-bottom: 10px; border-bottom: 1px solid #e2e2e2;
+    margin-left: -24px; margin-right: -24px; padding-left: 24px; padding-right: 24px;
+    margin-bottom: 20px;
+  }
+  .atlantic-section.dark-bg h2 { border-color: #2d2d2d; }
+  .atlantic-section .section-label {
+    font-family: 'Noto Serif', serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 1.5px; color: #999; text-transform: uppercase; margin-bottom: 16px;
+  }
+  .atlantic-section.dark-bg .section-label { color: #666; }
+
+  /* ── CW Motif icon (SVG inline for HTML preview) ──── */
+  .cw-motif {
+    width: 24px; height: 24px; display: inline-block;
+    background: #E7131A; mask-size: contain; -webkit-mask-size: contain;
+  }
+  .cw-motif-lg { width: 32px; height: 32px; }
+
+  /* ── Vertical card list ────────────────────────────── */
+  .card-list {
+    display: flex; flex-direction: column; gap: 16px;
+    max-width: 400px; margin: 0 auto;
+  }
+
+  /* ── Mode cards (Atlantic style) ───────────────────── */
+  .mode-card {
+    background: #fff; padding: 14px; position: relative;
+    border: 1px solid #e2e2e2; text-align: left;
+  }
+  .mode-card.dark { background: #1b1b1b; border-color: #2d2d2d; }
+  .mode-card .accent-bar {
+    position: absolute; top: 0; left: 0; bottom: 0; width: 3px;
+  }
+  .mode-card .mode-header {
+    display: flex; align-items: center; gap: 8px; margin-left: 4px;
+    padding-bottom: 8px; border-bottom: 1px solid #e2e2e2; margin-bottom: 8px;
+  }
+  .mode-card.dark .mode-header { border-color: #2d2d2d; }
+  .mode-card .mode-motif {
+    width: 20px; height: 20px; flex-shrink: 0;
+  }
+  .mode-card .mode-title {
+    font-family: 'Libre Baskerville', serif; font-size: 18px; color: #000;
+  }
+  .mode-card.dark .mode-title { color: #f2f2f2; }
+  .mode-card .mode-body {
+    font-family: 'Noto Serif', serif; font-size: 14px;
+    line-height: 21px; color: #444; margin-bottom: 8px;
+  }
+  .mode-card.dark .mode-body { color: #d1d1d1; }
+  .mode-card .mode-subtitle {
+    font-family: 'Noto Serif', serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 1.5px; color: #999; text-transform: uppercase; margin-bottom: 12px;
+  }
+  .mode-card.dark .mode-subtitle { color: #666; }
+  .learn-btn {
+    display: inline-block; font-family: 'Libre Baskerville', serif; font-size: 13px;
+    padding: 8px 14px; border: 1px solid #1e1e1e; cursor: pointer;
+    background: transparent; color: #1e1e1e;
+  }
+  .learn-btn:hover { background: #1e1e1e; color: #fff; }
+  .mode-card.dark .learn-btn { border-color: #555; color: #ccc; }
+  .mode-card.dark .learn-btn:hover { background: #555; color: #fff; }
+
+  /* ── Walkthrough visual area ─────────────────────── */
+  .wt-visual {
+    height: 200px; border: 1px solid #e2e2e2;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 8px;
+  }
+  .wt-visual.dark { border-color: #2d2d2d; }
+  .wt-visual img { width: 48px; height: 48px; opacity: 0.2; }
+  .wt-visual .wt-visual-label {
+    font-family: 'Noto Serif', serif; font-size: 12px;
+    text-transform: uppercase; letter-spacing: 1.5px; color: #bbb;
+  }
+  .wt-visual.dark .wt-visual-label { color: #555; }
+
+  /* ── Walkthrough cards (Atlantic style) ────────────── */
+  .wt-card {
+    background: #fff; padding: 14px; position: relative;
+    border: 1px solid #e2e2e2; text-align: left;
+  }
+  .wt-card.dark { background: #1b1b1b; border-color: #2d2d2d; }
+  .wt-card .accent-bar {
+    position: absolute; top: 0; left: 0; bottom: 0; width: 3px;
+  }
+  .wt-card .wt-header-section {
+    margin-left: 4px; padding-bottom: 8px; border-bottom: 1px solid #e2e2e2; margin-bottom: 8px;
+  }
+  .wt-card.dark .wt-header-section { border-color: #2d2d2d; }
+  .wt-card .wt-motif-row {
+    display: flex; align-items: center; gap: 8px; margin-top: 4px; margin-bottom: 4px;
+  }
+  .wt-card .wt-motif { width: 20px; height: 20px; flex-shrink: 0; }
+  .wt-card .wt-badge {
+    font-family: 'Noto Serif', serif; font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1.5px; color: #999;
+  }
+  .wt-card.dark .wt-badge { color: #666; }
+  .wt-card .wt-title {
+    font-family: 'Libre Baskerville', serif; font-size: 18px;
+    color: #000; margin-bottom: 6px;
+  }
+  .wt-card.dark .wt-title { color: #f2f2f2; }
+  .wt-card .wt-body {
+    font-family: 'Noto Serif', serif; font-size: 14px;
+    line-height: 21px; color: #444;
+  }
+  .wt-card.dark .wt-body { color: #d1d1d1; }
+
+  /* ── Nav row (walkthrough prev/next) ───────────────── */
+  .wt-nav {
+    display: flex; gap: 8px; margin-top: 14px;
+  }
+  .wt-nav-btn {
+    font-family: 'Libre Baskerville', serif; font-size: 14px;
+    padding: 10px 18px; border: 1px solid #1e1e1e; background: transparent;
+    color: #1e1e1e; cursor: pointer;
+  }
+  .wt-nav-btn.primary {
+    background: #E7131A; border-color: #E7131A; color: #fff; flex: 1; text-align: center;
+  }
+
+  /* ── Dot indicators ────────────────────────────────── */
+  .dots-row { display: flex; justify-content: center; gap: 8px; margin-top: 16px; }
+  .dot-indicator { width: 8px; height: 8px; border-radius: 4px; background: #ddd; }
+  .dot-indicator.active { background: #E7131A; }
+  .dot-indicator.dark { background: #444; }
+  .dot-indicator.dark.active { background: #E7131A; }
+</style>
+
+<!-- ── LIGHT MODE — Vertical Card List ─────────────────── -->
+
+<div class="atlantic-section">
+  <h2 style="font-family:'Libre Baskerville',serif;">Game Modes</h2>
+
+  <div class="card-list">
+    <div class="mode-card">
+      <div class="accent-bar" style="background:#E7131A;"></div>
+      <div class="mode-header">
+        <img src="crosswords_mobile/assets/design/icons/CWMotifRed.png" class="mode-motif" alt="CW">
+        <div class="mode-title">Duel</div>
+      </div>
+      <div class="mode-body">Race an AI opponent to solve all 5 words first — or take turns and see who finishes in fewer guesses.</div>
+      <div class="mode-subtitle">Easy &middot; Normal &middot; Hard</div>
+      <span class="learn-btn">Learn how &rarr;</span>
+    </div>
+
+    <div class="mode-card">
+      <div class="accent-bar" style="background:#E7131A;"></div>
+      <div class="mode-header">
+        <img src="crosswords_mobile/assets/design/icons/CWMotifRed.png" class="mode-motif" alt="CW">
+        <div class="mode-title">Challenge</div>
+      </div>
+      <div class="mode-body">Pick 5 words, generate a code, and share it. Your friend plays the same board — compare results when you're both done.</div>
+      <div class="mode-subtitle">Custom words &middot; Jotts &middot; QR or link</div>
+      <span class="learn-btn">Learn how &rarr;</span>
+    </div>
+
+    <div class="mode-card">
+      <div class="accent-bar" style="background:#E7131A;"></div>
+      <div class="mode-header">
+        <img src="crosswords_mobile/assets/design/icons/CWMotifRed.png" class="mode-motif" alt="CW">
+        <div class="mode-title">Blind Match</div>
+      </div>
+      <div class="mode-body">Neither player knows the words. Enter a shared number, and the app generates the same hidden board for both of you. Pure fairness.</div>
+      <div class="mode-subtitle">Random words &middot; Same seed = same board</div>
+      <span class="learn-btn">Learn how &rarr;</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── DARK MODE — Vertical Card List ─────────────────── -->
+
+<div class="atlantic-section dark-bg">
+  <h2 style="font-family:'Libre Baskerville',serif;color:#f2f2f2;">Game Modes</h2>
+
+  <div class="card-list">
+    <div class="mode-card dark">
+      <div class="accent-bar" style="background:#E7131A;"></div>
+      <div class="mode-header">
+        <img src="crosswords_mobile/assets/design/icons/CWMotifRed.png" class="mode-motif" alt="CW">
+        <div class="mode-title">Duel</div>
+      </div>
+      <div class="mode-body">Race an AI opponent to solve all 5 words first — or take turns and see who finishes in fewer guesses.</div>
+      <div class="mode-subtitle">Easy &middot; Normal &middot; Hard</div>
+      <span class="learn-btn">Learn how &rarr;</span>
+    </div>
+
+    <div class="mode-card dark">
+      <div class="accent-bar" style="background:#E7131A;"></div>
+      <div class="mode-header">
+        <img src="crosswords_mobile/assets/design/icons/CWMotifRed.png" class="mode-motif" alt="CW">
+        <div class="mode-title">Challenge</div>
+      </div>
+      <div class="mode-body">Pick 5 words, generate a code, and share it. Your friend plays the same board — compare results when you're both done.</div>
+      <div class="mode-subtitle">Custom words &middot; Jotts &middot; QR or link</div>
+      <span class="learn-btn">Learn how &rarr;</span>
+    </div>
+
+    <div class="mode-card dark">
+      <div class="accent-bar" style="background:#E7131A;"></div>
+      <div class="mode-header">
+        <img src="crosswords_mobile/assets/design/icons/CWMotifRed.png" class="mode-motif" alt="CW">
+        <div class="mode-title">Blind Match</div>
+      </div>
+      <div class="mode-body">Neither player knows the words. Enter a shared number, and the app generates the same hidden board for both of you. Pure fairness.</div>
+      <div class="mode-subtitle">Random words &middot; Same seed = same board</div>
+      <span class="learn-btn">Learn how &rarr;</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── WALKTHROUGH STEPS (Light) — Visual + Card ────────── -->
+
+<div class="atlantic-section">
+  <h2 style="font-family:'Libre Baskerville',serif;">Walkthrough Steps</h2>
+  <p style="font-family:'Noto Serif',serif;font-size:13px;color:#888;margin-bottom:24px;">Each step has a screenshot area above the instruction card.</p>
+
+  <div class="row">
+    <!-- Bot Duel — Step 3 -->
+    <div class="card-list" style="min-width:280px;max-width:320px;">
+      <div class="wt-visual">
+        <img src="crosswords_mobile/assets/design/icons/CWMotifRed.png" alt="CW">
+        <div class="wt-visual-label">Screenshot</div>
+      </div>
+      <div class="wt-card">
+        <div class="accent-bar" style="background:#E7131A;"></div>
+        <div class="wt-header-section">
+          <div class="wt-motif-row">
+            <img src="crosswords_mobile/assets/design/icons/CWMotifRed.png" class="wt-motif" alt="CW">
+            <div class="wt-badge">Step 3 of 5</div>
+          </div>
+          <div class="wt-title">Pick a Play Style</div>
+        </div>
+        <div class="wt-body"><strong>Race:</strong> you both solve simultaneously — speed matters.<br><strong>Turns:</strong> you alternate guesses, competing on accuracy.</div>
+        <div class="wt-nav">
+          <button class="wt-nav-btn">&lsaquo; Prev</button>
+          <button class="wt-nav-btn primary">Next &rsaquo;</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Challenge — Step 3 (Jotts) -->
+    <div class="card-list" style="min-width:280px;max-width:320px;">
+      <div class="wt-visual">
+        <img src="crosswords_mobile/assets/design/icons/CWMotifRed.png" alt="CW">
+        <div class="wt-visual-label">Screenshot</div>
+      </div>
+      <div class="wt-card">
+        <div class="accent-bar" style="background:#E7131A;"></div>
+        <div class="wt-header-section">
+          <div class="wt-motif-row">
+            <img src="crosswords_mobile/assets/design/icons/CWMotifRed.png" class="wt-motif" alt="CW">
+            <div class="wt-badge">Step 3 of 7</div>
+          </div>
+          <div class="wt-title">Or Use a Jott</div>
+        </div>
+        <div class="wt-body">Have a favorite word set? Open your <strong>Jotts</strong> and tap one to prefill all 5 words instantly. Create Jotts from the lobby or Settings.</div>
+        <div class="wt-nav">
+          <button class="wt-nav-btn">&lsaquo; Prev</button>
+          <button class="wt-nav-btn primary">Next &rsaquo;</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Seed Share — Step 1 -->
+    <div class="card-list" style="min-width:280px;max-width:320px;">
+      <div class="wt-visual">
+        <img src="crosswords_mobile/assets/design/icons/CWMotifRed.png" alt="CW">
+        <div class="wt-visual-label">Screenshot</div>
+      </div>
+      <div class="wt-card">
+        <div class="accent-bar" style="background:#E7131A;"></div>
+        <div class="wt-header-section">
+          <div class="wt-motif-row">
+            <img src="crosswords_mobile/assets/design/icons/CWMotifRed.png" class="wt-motif" alt="CW">
+            <div class="wt-badge">Step 1 of 6</div>
+          </div>
+          <div class="wt-title">What Is a Seed?</div>
+        </div>
+        <div class="wt-body">A seed is just a number — like a combination lock. When two players enter the same number, the app generates the exact same 5 hidden words. Neither player chose them, so it's <strong>completely fair</strong>.</div>
+        <div class="wt-nav">
+          <button class="wt-nav-btn" disabled style="opacity:0.3">&lsaquo; Prev</button>
+          <button class="wt-nav-btn primary">Next &rsaquo;</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── WALKTHROUGH STEPS (Dark) — Visual + Card ───────── -->
+
+<div class="atlantic-section dark-bg">
+  <h2 style="font-family:'Libre Baskerville',serif;color:#f2f2f2;">Walkthrough Steps</h2>
+
+  <div class="row">
+    <div class="card-list" style="min-width:280px;max-width:320px;">
+      <div class="wt-visual dark">
+        <img src="crosswords_mobile/assets/design/icons/CWMotifRed.png" alt="CW">
+        <div class="wt-visual-label">Screenshot</div>
+      </div>
+      <div class="wt-card dark">
+        <div class="accent-bar" style="background:#E7131A;"></div>
+        <div class="wt-header-section">
+          <div class="wt-motif-row">
+            <img src="crosswords_mobile/assets/design/icons/CWMotifRed.png" class="wt-motif" alt="CW">
+            <div class="wt-badge">Step 3 of 5</div>
+          </div>
+          <div class="wt-title">Pick a Play Style</div>
+        </div>
+        <div class="wt-body"><strong>Race:</strong> you both solve simultaneously — speed matters.<br><strong>Turns:</strong> you alternate guesses, competing on accuracy.</div>
+        <div class="wt-nav">
+          <button class="wt-nav-btn" style="border-color:#555;color:#ccc;">&lsaquo; Prev</button>
+          <button class="wt-nav-btn primary">Next &rsaquo;</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-list" style="min-width:280px;max-width:320px;">
+      <div class="wt-visual dark">
+        <img src="crosswords_mobile/assets/design/icons/CWMotifRed.png" alt="CW">
+        <div class="wt-visual-label">Screenshot</div>
+      </div>
+      <div class="wt-card dark">
+        <div class="accent-bar" style="background:#E7131A;"></div>
+        <div class="wt-header-section">
+          <div class="wt-motif-row">
+            <img src="crosswords_mobile/assets/design/icons/CWMotifRed.png" class="wt-motif" alt="CW">
+            <div class="wt-badge">Step 3 of 7</div>
+          </div>
+          <div class="wt-title">Or Use a Jott</div>
+        </div>
+        <div class="wt-body">Have a favorite word set? Open your <strong>Jotts</strong> and tap one to prefill all 5 words instantly. Create Jotts from the lobby or Settings.</div>
+        <div class="wt-nav">
+          <button class="wt-nav-btn" style="border-color:#555;color:#ccc;">&lsaquo; Prev</button>
+          <button class="wt-nav-btn primary">Next &rsaquo;</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-list" style="min-width:280px;max-width:320px;">
+      <div class="wt-visual dark">
+        <img src="crosswords_mobile/assets/design/icons/CWMotifRed.png" alt="CW">
+        <div class="wt-visual-label">Screenshot</div>
+      </div>
+      <div class="wt-card dark">
+        <div class="accent-bar" style="background:#E7131A;"></div>
+        <div class="wt-header-section">
+          <div class="wt-motif-row">
+            <img src="crosswords_mobile/assets/design/icons/CWMotifRed.png" class="wt-motif" alt="CW">
+            <div class="wt-badge">Step 1 of 6</div>
+          </div>
+          <div class="wt-title">What Is a Seed?</div>
+        </div>
+        <div class="wt-body">A seed is just a number — like a combination lock. When two players enter the same number, the app generates the exact same 5 hidden words. Neither player chose them, so it's <strong>completely fair</strong>.</div>
+        <div class="wt-nav">
+          <button class="wt-nav-btn" disabled style="opacity:0.3;border-color:#555;color:#ccc;">&lsaquo; Prev</button>
+          <button class="wt-nav-btn primary">Next &rsaquo;</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top: 32px; text-align: center; color: #888; font-size: 0.8rem;">
+  <p><strong>Atlantic Design:</strong> Libre Baskerville display, Noto Serif body, sharp corners, 1px borders, CWMotif icon.</p>
+  <p>Cards use horizontal ScrollView with snap-to-interval. Walkthrough replaces carousel with single card + prev/next.</p>
+</div>
+
+</body>
+</html>
