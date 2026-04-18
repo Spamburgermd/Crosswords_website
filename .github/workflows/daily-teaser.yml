@@ -21,6 +21,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
 
       - name: Set up Node 20
         uses: actions/setup-node@v4
@@ -55,14 +58,14 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin main
           git add public/teaser/daily-teaser.png
           DATE="${{ github.event.inputs.date }}"
           if [ -z "$DATE" ]; then
             DATE=$(date -u +%Y-%m-%d)
           else
-            # Normalize to zero-padded YYYY-MM-DD in case input was e.g. 2026-4-18
             DATE=$(date -u -d "$DATE" +%Y-%m-%d)
           fi
-          git commit -m "chore: update daily teaser for ${DATE}" || echo "Nothing to commit"
-          git pull --rebase origin main
+          git diff --staged --quiet && echo "Nothing to commit" && exit 0
+          git commit -m "chore: update daily teaser for ${DATE}"
           git push origin main
