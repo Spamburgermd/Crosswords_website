@@ -64,4 +64,5 @@ jobs:
             DATE=$(date -u -d "$DATE" +%Y-%m-%d)
           fi
           git commit -m "chore: update daily teaser for ${DATE}" || echo "Nothing to commit"
+          git pull --rebase origin main
           git push
