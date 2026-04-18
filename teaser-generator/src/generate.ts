@@ -55,7 +55,7 @@ function main(): void {
   const outputPath = path.join(outputDir, 'daily-teaser.png');
   const archivePath = path.join(outputDir, 'archive', `${dateStr}.png`);
 
-  const { revealedCoords, intersectionCoords } = renderTeaser({
+  const { tiles } = renderTeaser({
     words:       placement.words,
     targetsMeta: placement.targets_meta,
     seed,
@@ -64,12 +64,15 @@ function main(): void {
   });
 
   // 4. Summary
-  console.log(`[teaser] Revealed ${revealedCoords.length} cell(s): ${revealedCoords.join(', ')}`);
-  const intersectionReveals = revealedCoords.filter((k) => intersectionCoords.has(k));
-  if (intersectionReveals.length) {
-    console.log(`[teaser] Intersection reveal(s): ${intersectionReveals.join(', ')}`);
-  } else {
-    console.log(`[teaser] No intersection tiles revealed.`);
+  const feedbackLabel: Record<string, string> = {
+    correct:     'correct     (green)',
+    wrongSpot:   'wrongSpot   (amber)',
+    notInWord:   'notInWord   (teal) ',
+    notInPuzzle: 'notInPuzzle (pink) ',
+  };
+  console.log(`[teaser] Tiles: ${tiles.length}`);
+  for (const t of tiles) {
+    console.log(`  ${feedbackLabel[t.feedback] ?? t.feedback}  ${t.key} → ${t.letter}`);
   }
   console.log(`[teaser] Output  : ${outputPath}`);
   console.log(`[teaser] Archive : ${archivePath}`);

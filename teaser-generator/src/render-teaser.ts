@@ -1,13 +1,21 @@
 /**
  * render-teaser.ts
  *
- * Renders a daily teaser image using the Steel Blue palette from the game.
- * Reveals 3-5 letters deterministically via a date-seeded Mulberry32 PRNG.
+ * Renders a daily teaser image on a white background.
+ * Simulates a mid-game guess: 3–5 tiles with realistic feedback colors
+ * as if a player guessed some letters and received results.
  *
- * Constraints:
- *   - At most 1 intersection tile revealed (rendered in wrongSpot color, not correct)
- *   - Non-intersection reveals use the correct (deep navy) color
- *   - Per-word caps: 4-letter → 2, 5-letter → 2, 6-letter → 3
+ * Feedback mapping (CLASSIC game palette):
+ *   correct     — green (#6A9B6E): letter is correct and in the right position
+ *   wrongSpot   — amber (#C4A84D): letter is in this word but at the wrong position
+ *   notInWord   — teal  (#5A8A91): letter exists in the puzzle but not in this word
+ *   notInPuzzle — pink  (#F5A1A3): letter is nowhere in the puzzle
+ *
+ * Tile composition:
+ *   - 3–5 tiles total (PRNG-chosen)
+ *   - Always: 1 red, 1 yellow, 1 teal
+ *   - Optional: extra yellow (~50%), extra teal (~50%), green (~25%)
+ *   - At most 2 tiles from any one word; no duplicate cells
  *   - Deterministic: same date → same image
  */
 
@@ -17,17 +25,19 @@ import * as path from 'path';
 import type { TargetMeta } from './pipeline/localCanonicalTargetsFromLayout.js';
 
 // ---------------------------------------------------------------------------
-// Steel Blue palette (from crosswords_mobile/src/theme/tilePalette.ts)
+// CLASSIC game palette (from crosswords_mobile/src/theme/tilePalette.ts)
 // ---------------------------------------------------------------------------
 const PALETTE = {
-  appBackground: '#0D1B2A',
-  idle:       { bg: '#FFFFFF', border: '#D3D3D6', letter: '#2A2A2E' },
-  correct:    { bg: '#1E2D3D', letter: '#FFFFFF' }, // non-intersection reveals
-  wrongSpot:  { bg: '#4A6378', letter: '#FFFFFF' }, // intersection reveal
+  appBackground: '#FFFFFF',
+  idle:        { bg: '#CBD5E1', border: '#94A3B8' },
+  correct:     { bg: '#6A9B6E', letter: '#FFFFFF' }, // green — correct position
+  wrongSpot:   { bg: '#C4A84D', letter: '#FFFFFF' }, // amber — in word, wrong position
+  notInWord:   { bg: '#5A8A91', letter: '#FFFFFF' }, // teal  — in puzzle, not this word
+  notInPuzzle: { bg: '#F5A1A3', letter: '#FFFFFF' }, // pink  — not in puzzle at all
   branding: {
-    accent:   '#E7131A', // brand red — applied to the two S glyphs in CrosSwords
-    wordmark: '#FFFFFF',
-    tagline:  '#93A8B8', // notInWord blue-grey
+    accent:   '#E7131A', // brand red — the two S glyphs in CrosSwords
+    wordmark: '#1E2D3D', // dark navy on white
+    tagline:  '#4A6378', // medium blue-grey on white
   },
 } as const;
 
@@ -38,7 +48,7 @@ const GAP             = 4;
 const CORNER_RADIUS   = 5;
 const BRANDING_HEIGHT = 100;
 const MARGIN          = 32;
-const TARGET_GRID_W   = 640; // target pixel width for the grid area
+const TARGET_GRID_W   = 640;
 const TILE_MIN        = 60;
 const TILE_MAX        = 82;
 
@@ -60,28 +70,31 @@ function coordKey(r: number, c: number): string {
 }
 
 // ---------------------------------------------------------------------------
-// Per-word reveal cap
+// Types
 // ---------------------------------------------------------------------------
-function wordRevealCap(wordLen: number): number {
-  if (wordLen <= 4) return 2;
-  if (wordLen <= 5) return 2;
-  return 3; // 6+
-}
+export type FeedbackType = 'correct' | 'wrongSpot' | 'notInWord' | 'notInPuzzle';
 
-// ---------------------------------------------------------------------------
-// Reveal cell selection
-// ---------------------------------------------------------------------------
-export type RevealResult = {
-  revealedCoords: string[];
-  intersectionCoords: Set<string>;
+export type RevealTile = {
+  key: string;
+  letter: string;
+  feedback: FeedbackType;
 };
 
-export function selectRevealCells(
+export type RevealResult = {
+  tiles: RevealTile[];
+};
+
+// ---------------------------------------------------------------------------
+// Reveal tile selection
+// ---------------------------------------------------------------------------
+export function selectRevealTiles(
   words: string[],
   targetsMeta: TargetMeta[],
   seed: number,
 ): RevealResult {
-  // Build coord → [wordIndices] map
+  const upperWords = words.map(w => w.toUpperCase());
+
+  // Build coord → word indices map
   const coordToWords = new Map<string, number[]>();
   targetsMeta.forEach((meta, wi) => {
     meta.coords.forEach(([r, c]) => {
@@ -92,61 +105,143 @@ export function selectRevealCells(
     });
   });
 
-  const intersectionCoords = new Set<string>();
-  coordToWords.forEach((indices, k) => {
-    if (indices.length > 1) intersectionCoords.add(k);
+  // Build occupied cells list
+  type Cell = { key: string; wordIndices: number[] };
+  const occupiedCells: Cell[] = [];
+  coordToWords.forEach((wordIndices, key) => {
+    occupiedCells.push({ key, wordIndices });
   });
 
-  // Build candidates: one entry per (wordIndex, posInWord) pair
-  type Candidate = { wi: number; key: string; isIntersection: boolean };
-  const candidates: Candidate[] = [];
-  targetsMeta.forEach((meta, wi) => {
-    meta.coords.forEach(([r, c]) => {
-      const k = coordKey(r, c);
-      candidates.push({ wi, key: k, isIntersection: intersectionCoords.has(k) });
-    });
-  });
+  // Puzzle letter set and letters absent from all words
+  const puzzleLetterSet = new Set<string>();
+  for (const w of upperWords) for (const ch of w) puzzleLetterSet.add(ch);
+  const notInPuzzleLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    .split('')
+    .filter(ch => !puzzleLetterSet.has(ch));
 
-  // Fisher-Yates shuffle with a derived seed (so reveal randomness is
-  // independent from puzzle-generation randomness, yet still date-locked)
+  // PRNG — derived seed so reveal randomness is independent from puzzle generation
   const revealSeed = ((seed * 0x9e3779b9) ^ 0x5a4fcf12) >>> 0;
   const rng = mulberry32(revealSeed);
-  for (let i = candidates.length - 1; i > 0; i--) {
+
+  // Shuffle occupied cells
+  const cells = [...occupiedCells];
+  for (let i = cells.length - 1; i > 0; i--) {
     const j = Math.floor(rng() * (i + 1));
-    const tmp = candidates[i]!;
-    candidates[i] = candidates[j]!;
-    candidates[j] = tmp;
+    const tmp = cells[i]!;
+    cells[i] = cells[j]!;
+    cells[j] = tmp;
   }
 
-  const revealedCoords: string[] = [];
-  const revealedSet = new Set<string>();
+  // Structural decisions
+  const totalTiles   = 3 + Math.floor(rng() * 3); // 3, 4, or 5
+  const includeGreen = rng() < 0.25;              // green on ~25% of days
+  const extraYellow  = rng() < 0.50;              // second wrongSpot on ~50%
+  const extraBlue    = rng() < 0.50;              // second notInWord on ~50%
+
+  // Build target sequence:
+  //   required (always): 1 red + 1 yellow + 1 teal = 3
+  //   optional extras trimmed to fit totalTiles
+  const required: FeedbackType[] = ['notInPuzzle', 'wrongSpot', 'notInWord'];
+  const extras: FeedbackType[] = [];
+  if (extraYellow)  extras.push('wrongSpot');
+  if (extraBlue)    extras.push('notInWord');
+  if (includeGreen) extras.push('correct');
+
+  // Shuffle extras so the trim doesn't always drop green last
+  for (let i = extras.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    const tmp = extras[i]!;
+    extras[i] = extras[j]!;
+    extras[j] = tmp;
+  }
+
+  const targets: FeedbackType[] = [
+    ...required,
+    ...extras.slice(0, totalTiles - required.length),
+  ];
+
+  // Shuffle final order so feedback colors appear at random positions in the grid
+  for (let i = targets.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    const tmp = targets[i]!;
+    targets[i] = targets[j]!;
+    targets[j] = tmp;
+  }
+
+  // Helper: pick a random element from an array (1 PRNG call)
+  function pick<T>(arr: T[]): T | undefined {
+    if (arr.length === 0) return undefined;
+    return arr[Math.floor(rng() * arr.length)];
+  }
+
+  // Helper: the letter at a given cell for word wi
+  function letterAt(wi: number, key: string): string | undefined {
+    const meta = targetsMeta[wi];
+    if (!meta) return undefined;
+    const idx = meta.coords.findIndex(([r, c]) => coordKey(r, c) === key);
+    return idx >= 0 ? upperWords[wi]?.[idx] : undefined;
+  }
+
+  // Place tiles — for each target feedback type, find the first valid cell
+  const tiles: RevealTile[] = [];
+  const usedKeys = new Set<string>();
   const countPerWord = new Map<number, number>();
-  let intersectionUsed = 0;
 
-  for (const c of candidates) {
-    if (revealedCoords.length >= 5) break;
-    if (revealedSet.has(c.key)) continue;
+  for (const feedback of targets) {
+    for (const cell of cells) {
+      if (usedKeys.has(cell.key)) continue;
+      if (cell.wordIndices.some(wi => (countPerWord.get(wi) ?? 0) >= 2)) continue;
 
-    // Intersection cap
-    if (c.isIntersection && intersectionUsed >= 1) continue;
+      let letter: string | undefined;
 
-    // Per-word cap: must satisfy the cap for EVERY word sharing this coord
-    const wordIndices = coordToWords.get(c.key) ?? [c.wi];
-    const capViolated = wordIndices.some(
-      (wi) => (countPerWord.get(wi) ?? 0) >= wordRevealCap(words[wi]?.length ?? 0),
-    );
-    if (capViolated) continue;
+      if (feedback === 'correct') {
+        // Actual letter at this cell (intersection cells share the same letter)
+        letter = letterAt(cell.wordIndices[0]!, cell.key);
 
-    // Accept this reveal
-    revealedCoords.push(c.key);
-    revealedSet.add(c.key);
-    for (const wi of wordIndices) {
-      countPerWord.set(wi, (countPerWord.get(wi) ?? 0) + 1);
+      } else if (feedback === 'wrongSpot') {
+        // A letter that IS in this cell's word(s) but NOT at this specific position.
+        // Exclude the actual letter(s) at this cell to prevent confusion with green.
+        const actualAtCell = new Set(
+          cell.wordIndices
+            .map(wi => letterAt(wi, cell.key))
+            .filter((ch): ch is string => ch !== undefined),
+        );
+        const candidates = new Set<string>();
+        for (const wi of cell.wordIndices) {
+          for (const ch of upperWords[wi] ?? '') {
+            if (!actualAtCell.has(ch)) candidates.add(ch);
+          }
+        }
+        letter = pick(Array.from(candidates));
+
+      } else if (feedback === 'notInWord') {
+        // A letter that exists somewhere in the puzzle but NOT in any word at this cell.
+        // For intersection cells: must not be in either intersecting word.
+        const cellWordLetters = new Set<string>();
+        for (const wi of cell.wordIndices) {
+          for (const ch of upperWords[wi] ?? '') cellWordLetters.add(ch);
+        }
+        const candidates = Array.from(puzzleLetterSet).filter(ch => !cellWordLetters.has(ch));
+        letter = pick(candidates);
+
+      } else {
+        // notInPuzzle — a letter that appears in none of the puzzle's words
+        letter = pick(notInPuzzleLetters);
+      }
+
+      if (!letter) continue; // this cell can't satisfy this feedback type; try next cell
+
+      tiles.push({ key: cell.key, letter, feedback });
+      usedKeys.add(cell.key);
+      for (const wi of cell.wordIndices) {
+        countPerWord.set(wi, (countPerWord.get(wi) ?? 0) + 1);
+      }
+      break;
     }
-    if (c.isIntersection) intersectionUsed++;
+    // If no valid cell exists for this feedback type, that tile is silently omitted
   }
 
-  return { revealedCoords, intersectionCoords };
+  return { tiles };
 }
 
 // ---------------------------------------------------------------------------
@@ -196,13 +291,13 @@ function drawBranding(
 
   // "CrosSwords" — render character by character to colour the two S glyphs
   // Positions (0-based): C(0)r(1)o(2)s(3)S(4)w(5)o(6)r(7)d(8)s(9)
-  const wordmark    = 'CrosSwords';
-  const redIndices  = new Set([4, 9]);
-  const fontSize    = 30;
+  const wordmark   = 'CrosSwords';
+  const redIndices = new Set([4, 9]);
+  const fontSize   = 30;
 
-  ctx.font          = `bold ${fontSize}px Arial, Helvetica, sans-serif`;
-  ctx.textBaseline  = 'middle';
-  ctx.textAlign     = 'left';
+  ctx.font         = `bold ${fontSize}px Arial, Helvetica, sans-serif`;
+  ctx.textBaseline = 'middle';
+  ctx.textAlign    = 'left';
 
   // Measure total width for centering
   let totalW = 0;
@@ -237,7 +332,7 @@ export type RenderTeaserOptions = {
 export function renderTeaser(opts: RenderTeaserOptions): RevealResult {
   const { words, targetsMeta, seed, outputPath, archivePath } = opts;
 
-  // Build 10×10 letter grid
+  // Build 10×10 letter grid from actual solution
   const grid: (string | null)[][] = Array.from({ length: 10 }, () => Array(10).fill(null) as null[]);
   targetsMeta.forEach((meta, wi) => {
     meta.coords.forEach(([r, c], pos) => {
@@ -283,39 +378,37 @@ export function renderTeaser(opts: RenderTeaserOptions): RevealResult {
   const canvas = createCanvas(canvasW, canvasH);
   const ctx    = canvas.getContext('2d');
 
-  // Background
+  // White background
   ctx.fillStyle = PALETTE.appBackground;
   ctx.fillRect(0, 0, canvasW, canvasH);
 
-  // Select reveal cells
-  const result = selectRevealCells(words, targetsMeta, seed);
-  const { revealedCoords, intersectionCoords } = result;
-  const revealedSet = new Set(revealedCoords);
+  // Select reveal tiles
+  const result  = selectRevealTiles(words, targetsMeta, seed);
+  const tileMap = new Map(result.tiles.map(t => [t.key, t]));
 
-  // Letter font
+  // Letter font size
   const letterFontSize = Math.round(tileSize * 0.58);
 
   // Draw tiles
   for (let r = padR1; r <= padR2; r++) {
     for (let c = padC1; c <= padC2; c++) {
-      const letter = grid[r]![c];
-      if (letter === null) continue; // empty cell — no tile
+      if (grid[r]![c] === null) continue; // empty cell — no tile
 
       const x   = MARGIN + (c - padC1) * (tileSize + GAP);
       const y   = MARGIN + (r - padR1) * (tileSize + GAP);
       const key = coordKey(r, c);
+      const tile = tileMap.get(key);
 
-      if (revealedSet.has(key)) {
-        const isIntersection = intersectionCoords.has(key);
-        const colors = isIntersection ? PALETTE.wrongSpot : PALETTE.correct;
+      if (tile) {
+        const colors = PALETTE[tile.feedback];
         roundRect(ctx, x, y, tileSize, tileSize, CORNER_RADIUS, colors.bg);
         ctx.font         = `bold ${letterFontSize}px Arial, Helvetica, sans-serif`;
         ctx.fillStyle    = colors.letter;
         ctx.textAlign    = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(letter, x + tileSize / 2, y + tileSize / 2 + 1);
+        ctx.fillText(tile.letter, x + tileSize / 2, y + tileSize / 2 + 1);
       } else {
-        // Unrevealed tile — white with grey border, no letter
+        // Unrevealed tile — medium-dark neutral, clearly visible on white
         roundRect(ctx, x, y, tileSize, tileSize, CORNER_RADIUS, PALETTE.idle.bg, PALETTE.idle.border);
       }
     }
