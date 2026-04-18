@@ -65,4 +65,4 @@ jobs:
           fi
           git commit -m "chore: update daily teaser for ${DATE}" || echo "Nothing to commit"
           git pull --rebase origin main
-          git push
+          git push origin main
