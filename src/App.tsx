@@ -3,6 +3,7 @@ import Hero from './components/Hero'
 import HowItWorks from './components/HowItWorks'
 import GameModes from './components/GameModes'
 import WhyDifferent from './components/WhyDifferent'
+import DailyTeaser from './components/DailyTeaser'
 import CTA from './components/CTA'
 import Footer from './components/Footer'
 
@@ -25,6 +26,8 @@ export default function App() {
       <GameModes />
       <Divider />
       <WhyDifferent />
+      <DailyTeaser />
+      <Divider />
       <CTA />
       <Footer />
     </>

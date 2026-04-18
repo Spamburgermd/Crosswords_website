@@ -537,6 +537,124 @@ img { display: block; max-width: 100%; }
 }
 
 /* ═══════════════════════════════════════════
+   DAILY TEASER
+   ═══════════════════════════════════════════ */
+.daily-teaser {
+  padding: var(--section-pad) 40px;
+  text-align: center;
+  background: var(--bg);
+}
+
+.daily-teaser-inner {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+/* Padded frame — brackets sit at its outer corners, image sits inside */
+.teaser-frame {
+  position: relative;
+  padding: 20px;
+  max-width: 480px;
+  width: 100%;
+}
+
+/* ── Corner bracket elements ───────────────────────────────────────────
+   Each div = one L-shaped corner (outer bracket, 3px stroke).
+   ::after = inner bracket (2px stroke), inset 9px = 3px outer + 6px gap.
+   ──────────────────────────────────────────────────────────────────── */
+.bracket-corner {
+  position: absolute;
+  width: 55px;   /* horizontal run */
+  height: 155px; /* vertical run */
+  pointer-events: none;
+}
+
+/* Outer bracket — top-left */
+.bracket-tl {
+  top: 0; left: 0;
+  border-top:  3px solid var(--red);
+  border-left: 3px solid var(--red);
+  border-top-left-radius: 2px;
+}
+/* Outer bracket — top-right */
+.bracket-tr {
+  top: 0; right: 0;
+  border-top:   3px solid var(--red);
+  border-right: 3px solid var(--red);
+  border-top-right-radius: 2px;
+}
+/* Outer bracket — bottom-left */
+.bracket-bl {
+  bottom: 0; left: 0;
+  border-bottom: 3px solid var(--red);
+  border-left:   3px solid var(--red);
+  border-bottom-left-radius: 2px;
+}
+/* Outer bracket — bottom-right */
+.bracket-br {
+  bottom: 0; right: 0;
+  border-bottom: 3px solid var(--red);
+  border-right:  3px solid var(--red);
+  border-bottom-right-radius: 2px;
+}
+
+/* Inner bracket shared size */
+.bracket-corner::after {
+  content: '';
+  position: absolute;
+  width: 43px;   /* 55 − 12 */
+  height: 143px; /* 155 − 12 */
+}
+
+/* Inner bracket — top-left */
+.bracket-tl::after {
+  top: 9px; left: 9px;
+  border-top:  2px solid var(--red);
+  border-left: 2px solid var(--red);
+  border-top-left-radius: 2px;
+}
+/* Inner bracket — top-right */
+.bracket-tr::after {
+  top: 9px; right: 9px;
+  border-top:   2px solid var(--red);
+  border-right: 2px solid var(--red);
+  border-top-right-radius: 2px;
+}
+/* Inner bracket — bottom-left */
+.bracket-bl::after {
+  bottom: 9px; left: 9px;
+  border-bottom: 2px solid var(--red);
+  border-left:   2px solid var(--red);
+  border-bottom-left-radius: 2px;
+}
+/* Inner bracket — bottom-right */
+.bracket-br::after {
+  bottom: 9px; right: 9px;
+  border-bottom: 2px solid var(--red);
+  border-right:  2px solid var(--red);
+  border-bottom-right-radius: 2px;
+}
+
+.teaser-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--border);
+}
+
+.teaser-caption {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-style: italic;
+  color: var(--text-muted);
+  letter-spacing: 0.3px;
+}
+
+/* ═══════════════════════════════════════════
    CTA / DOWNLOAD
    ═══════════════════════════════════════════ */
 .cta-section {
@@ -752,4 +870,8 @@ img { display: block; max-width: 100%; }
 
   .positioning-line { font-size: 18px; }
   .mode-card { padding: 28px 20px; }
+
+  /* Scale brackets down for small screens */
+  .bracket-corner         { width: 40px; height: 110px; }
+  .bracket-corner::after  { width: 28px; height: 98px; }
 }
