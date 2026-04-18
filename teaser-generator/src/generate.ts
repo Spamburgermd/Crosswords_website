@@ -15,7 +15,14 @@ import { renderTeaser }          from './render-teaser.js';
 function parseDate(): string {
   const args = process.argv.slice(2);
   const idx  = args.indexOf('--date');
-  if (idx !== -1 && args[idx + 1]) return args[idx + 1]!;
+  if (idx !== -1 && args[idx + 1]) {
+    // Normalize to zero-padded YYYY-MM-DD (e.g. 2026-4-8 → 2026-04-08)
+    const parts = args[idx + 1]!.split('-');
+    const y   = parts[0] ?? '';
+    const m   = String(Number(parts[1] ?? '1')).padStart(2, '0');
+    const day = String(Number(parts[2] ?? '1')).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  }
   const d = new Date();
   const y = d.getFullYear();
   const m = String(d.getMonth() + 1).padStart(2, '0');
