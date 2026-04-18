@@ -58,15 +58,21 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git fetch origin main
-          git reset --soft origin/main
-          git add public/teaser/daily-teaser.png
           DATE="${{ github.event.inputs.date }}"
           if [ -z "$DATE" ]; then
             DATE=$(date -u +%Y-%m-%d)
           else
             DATE=$(date -u -d "$DATE" +%Y-%m-%d)
           fi
-          git diff --staged --quiet && echo "Nothing to commit" && exit 0
-          git commit -m "chore: update daily teaser for ${DATE}"
-          git push origin main
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git reset --soft origin/main
+            git add public/teaser/daily-teaser.png
+            git diff --staged --quiet && echo "Nothing to commit" && exit 0
+            git commit -m "chore: update daily teaser for ${DATE}"
+            git push origin main && exit 0
+            echo "Push attempt ${attempt} failed, retrying..."
+            sleep $((attempt * 3))
+          done
+          echo "All push attempts failed"
+          exit 1
