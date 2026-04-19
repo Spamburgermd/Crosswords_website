@@ -30,7 +30,7 @@ function parseDate(): string {
   return `${y}-${m}-${day}`;
 }
 
-function main(): void {
+async function main(): Promise<void> {
   const dateStr = parseDate();
   const seed    = getDailyPuzzleSeed(dateStr);
 
@@ -62,7 +62,7 @@ function main(): void {
   const outputPath = path.join(outputDir, 'daily-teaser.png');
   const archivePath = path.join(outputDir, 'archive', `${dateStr}.png`);
 
-  const { tiles } = renderTeaser({
+  const { tiles } = await renderTeaser({
     words:       placement.words,
     targetsMeta: placement.targets_meta,
     seed,
@@ -86,4 +86,4 @@ function main(): void {
   console.log('[teaser] Done.');
 }
 
-main();
+main().catch(err => { console.error(err); process.exit(1); });

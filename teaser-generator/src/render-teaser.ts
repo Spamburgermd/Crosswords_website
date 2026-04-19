@@ -19,9 +19,15 @@
  *   - Deterministic: same date → same image
  */
 
-import { createCanvas } from 'canvas';
+import { createCanvas, loadImage, registerFont } from 'canvas';
 import * as fs from 'fs';
 import * as path from 'path';
+
+// Register LibreBaskerville for cell letters
+registerFont(
+  path.resolve(process.cwd(), 'assets', 'fonts', 'LibreBaskerville-Regular.ttf'),
+  { family: 'LibreBaskerville' },
+);
 import type { TargetMeta } from './pipeline/localCanonicalTargetsFromLayout.js';
 
 // ---------------------------------------------------------------------------
@@ -29,7 +35,7 @@ import type { TargetMeta } from './pipeline/localCanonicalTargetsFromLayout.js';
 // ---------------------------------------------------------------------------
 const PALETTE = {
   appBackground: '#FFFFFF',
-  idle:        { bg: '#CBD5E1', border: '#94A3B8' },
+  idle:        { bg: '#f6f6f9', border: '#000000' },
   correct:     { bg: '#6A9B6E', letter: '#FFFFFF' }, // green — correct position
   wrongSpot:   { bg: '#C4A84D', letter: '#FFFFFF' }, // amber — in word, wrong position
   notInWord:   { bg: '#5A8A91', letter: '#FFFFFF' }, // teal  — in puzzle, not this word
@@ -45,7 +51,7 @@ const PALETTE = {
 // Layout constants
 // ---------------------------------------------------------------------------
 const GAP             = 4;
-const CORNER_RADIUS   = 5;
+const CORNER_RADIUS   = 0;
 const BRANDING_HEIGHT = 100;
 const MARGIN          = 32;
 const TARGET_GRID_W   = 640;
@@ -256,6 +262,7 @@ function roundRect(
   r: number,
   fill: string,
   stroke?: string,
+  strokeWidth = 1,
 ): void {
   ctx.beginPath();
   ctx.moveTo(x + r, y);
@@ -272,9 +279,89 @@ function roundRect(
   ctx.fill();
   if (stroke) {
     ctx.strokeStyle = stroke;
-    ctx.lineWidth = 1;
+    ctx.lineWidth = strokeWidth;
     ctx.stroke();
   }
+}
+
+// ---------------------------------------------------------------------------
+// Corner accent brackets (matches game's atlanticStyles boardCornerTL/BR)
+// ---------------------------------------------------------------------------
+const MOTIF_RED = '#E7131A';
+
+function drawLCornerTL(
+  ctx: ReturnType<ReturnType<typeof createCanvas>['getContext']>,
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  strokeWidth: number,
+  radius: number,
+  color: string,
+): void {
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(x, y + h);
+  ctx.lineTo(x, y + radius);
+  ctx.arcTo(x, y, x + radius, y, radius);
+  ctx.lineTo(x + w, y);
+  ctx.strokeStyle = color;
+  ctx.lineWidth = strokeWidth;
+  ctx.lineCap = 'round';
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawLCornerBR(
+  ctx: ReturnType<ReturnType<typeof createCanvas>['getContext']>,
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  strokeWidth: number,
+  radius: number,
+  color: string,
+): void {
+  const rx = x + w;
+  const by = y + h;
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(rx, y);
+  ctx.lineTo(rx, by - radius);
+  ctx.arcTo(rx, by, rx - radius, by, radius);
+  ctx.lineTo(x, by);
+  ctx.strokeStyle = color;
+  ctx.lineWidth = strokeWidth;
+  ctx.lineCap = 'round';
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawCornerAccents(
+  ctx: ReturnType<ReturnType<typeof createCanvas>['getContext']>,
+  canvasW: number,
+  canvasH: number,
+): void {
+  // Scale constants from game code proportionally to canvas width (game ~390pt wide)
+  const scale      = canvasW / 390;
+  const INSET_H    = 0;
+  const INSET_V    = Math.round(2  * scale);
+  const OUTER_W    = Math.round(70 * scale);
+  const OUTER_H    = Math.round(220 * scale);
+  const OUTER_STR  = Math.max(2, Math.round(3 * scale));
+  const INNER_GAP  = Math.round(6  * scale);
+  const INNER_W    = OUTER_W - INNER_GAP * 2;
+  const INNER_H    = OUTER_H - INNER_GAP * 2;
+  const INNER_STR  = Math.max(1, Math.round(2 * scale));
+  const RADIUS     = 2;
+
+  // Top-left outer + inner
+  drawLCornerTL(ctx, INSET_H, INSET_V, OUTER_W, OUTER_H, OUTER_STR, RADIUS, MOTIF_RED);
+  drawLCornerTL(ctx, INSET_H + INNER_GAP, INSET_V + INNER_GAP, INNER_W, INNER_H, INNER_STR, RADIUS, MOTIF_RED);
+
+  // Bottom-right outer + inner
+  drawLCornerBR(ctx, canvasW - INSET_H - OUTER_W, canvasH - INSET_V - OUTER_H, OUTER_W, OUTER_H, OUTER_STR, RADIUS, MOTIF_RED);
+  drawLCornerBR(ctx, canvasW - INSET_H - INNER_GAP - INNER_W, canvasH - INSET_V - INNER_GAP - INNER_H, INNER_W, INNER_H, INNER_STR, RADIUS, MOTIF_RED);
 }
 
 // ---------------------------------------------------------------------------
@@ -284,31 +371,38 @@ function drawBranding(
   ctx: ReturnType<ReturnType<typeof createCanvas>['getContext']>,
   canvasW: number,
   brandingTop: number,
+  logo: Awaited<ReturnType<typeof loadImage>> | null,
 ): void {
-  const centerX = canvasW / 2;
-  const wordmarkY = brandingTop + 34;
-  const taglineY  = brandingTop + 66;
+  const centerX  = canvasW / 2;
+  const taglineY = brandingTop + 78;
 
-  // "CrosSwords" — render character by character to colour the two S glyphs
-  // Positions (0-based): C(0)r(1)o(2)s(3)S(4)w(5)o(6)r(7)d(8)s(9)
-  const wordmark   = 'CrosSwords';
-  const redIndices = new Set([4, 9]);
-  const fontSize   = 30;
-
-  ctx.font         = `bold ${fontSize}px Arial, Helvetica, sans-serif`;
-  ctx.textBaseline = 'middle';
-  ctx.textAlign    = 'left';
-
-  // Measure total width for centering
-  let totalW = 0;
-  for (const ch of wordmark) totalW += ctx.measureText(ch).width;
-
-  let x = centerX - totalW / 2;
-  wordmark.split('').forEach((ch, i) => {
-    ctx.fillStyle = redIndices.has(i) ? PALETTE.branding.accent : PALETTE.branding.wordmark;
-    ctx.fillText(ch, x, wordmarkY);
-    x += ctx.measureText(ch).width;
-  });
+  if (logo) {
+    // Draw logo image centered, scaled to fit the branding area
+    const maxH = 48;
+    const maxW = canvasW * 0.78;
+    const scale = Math.min(maxW / logo.width, maxH / logo.height);
+    const lw = logo.width  * scale;
+    const lh = logo.height * scale;
+    const lx = (canvasW - lw) / 2;
+    const ly = brandingTop + 14;
+    ctx.drawImage(logo as Parameters<typeof ctx.drawImage>[0], lx, ly, lw, lh);
+  } else {
+    // Fallback: text wordmark
+    const wordmarkY  = brandingTop + 34;
+    const wordmark   = 'CrosSwords';
+    const redIndices = new Set([4, 9]);
+    ctx.font         = `bold 30px Arial, Helvetica, sans-serif`;
+    ctx.textBaseline = 'middle';
+    ctx.textAlign    = 'left';
+    let totalW = 0;
+    for (const ch of wordmark) totalW += ctx.measureText(ch).width;
+    let x = centerX - totalW / 2;
+    wordmark.split('').forEach((ch, i) => {
+      ctx.fillStyle = redIndices.has(i) ? PALETTE.branding.accent : PALETTE.branding.wordmark;
+      ctx.fillText(ch, x, wordmarkY);
+      x += ctx.measureText(ch).width;
+    });
+  }
 
   // Tagline
   ctx.font         = `14px Arial, Helvetica, sans-serif`;
@@ -329,8 +423,27 @@ export type RenderTeaserOptions = {
   archivePath: string;
 };
 
-export function renderTeaser(opts: RenderTeaserOptions): RevealResult {
+export async function renderTeaser(opts: RenderTeaserOptions): Promise<RevealResult> {
   const { words, targetsMeta, seed, outputPath, archivePath } = opts;
+
+  // Load assets (fall back gracefully if missing)
+  type LoadedImage = Awaited<ReturnType<typeof loadImage>>;
+  const assetsDir = path.resolve(process.cwd(), 'assets');
+
+  let logo: LoadedImage | null = null;
+  try { logo = await loadImage(path.join(assetsDir, 'logo.png')); } catch { /* fallback to text */ }
+
+  let motif: LoadedImage | null = null;
+  try { motif = await loadImage(path.join(assetsDir, 'icons', 'CWMotifBlack.png')); } catch { /* no motif */ }
+
+  // Build intersection map (cells used by more than one word)
+  const coordWordCount = new Map<string, number>();
+  targetsMeta.forEach(meta => {
+    meta.coords.forEach(([r, c]) => {
+      const k = coordKey(r, c);
+      coordWordCount.set(k, (coordWordCount.get(k) ?? 0) + 1);
+    });
+  });
 
   // Build 10×10 letter grid from actual solution
   const grid: (string | null)[][] = Array.from({ length: 10 }, () => Array(10).fill(null) as null[]);
@@ -399,23 +512,47 @@ export function renderTeaser(opts: RenderTeaserOptions): RevealResult {
       const key = coordKey(r, c);
       const tile = tileMap.get(key);
 
+      const isIntersection = (coordWordCount.get(key) ?? 0) > 1;
+
       if (tile) {
         const colors = PALETTE[tile.feedback];
-        roundRect(ctx, x, y, tileSize, tileSize, CORNER_RADIUS, colors.bg);
-        ctx.font         = `bold ${letterFontSize}px Arial, Helvetica, sans-serif`;
+        roundRect(ctx, x, y, tileSize, tileSize, CORNER_RADIUS, colors.bg, '#000000', 1.5);
+        // Motif watermark on revealed intersection cells (white, low opacity)
+        if (isIntersection && motif) {
+          const pad = 2;
+          const ms  = tileSize - pad * 2;
+          ctx.save();
+          ctx.globalAlpha = 0.20;
+          ctx.globalCompositeOperation = 'screen';
+          ctx.drawImage(motif as Parameters<typeof ctx.drawImage>[0], x + pad, y + pad, ms, ms);
+          ctx.restore();
+        }
+        ctx.font         = `${letterFontSize}px LibreBaskerville, serif`;
         ctx.fillStyle    = colors.letter;
         ctx.textAlign    = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(tile.letter, x + tileSize / 2, y + tileSize / 2 + 1);
       } else {
-        // Unrevealed tile — medium-dark neutral, clearly visible on white
-        roundRect(ctx, x, y, tileSize, tileSize, CORNER_RADIUS, PALETTE.idle.bg, PALETTE.idle.border);
+        // Unrevealed tile
+        roundRect(ctx, x, y, tileSize, tileSize, CORNER_RADIUS, PALETTE.idle.bg, PALETTE.idle.border, 1.5);
+        // Motif watermark on unrevealed intersection cells (dark, low opacity)
+        if (isIntersection && motif) {
+          const pad = 2;
+          const ms  = tileSize - pad * 2;
+          ctx.save();
+          ctx.globalAlpha = 0.18;
+          ctx.drawImage(motif as Parameters<typeof ctx.drawImage>[0], x + pad, y + pad, ms, ms);
+          ctx.restore();
+        }
       }
     }
   }
 
+  // Corner accent brackets
+  drawCornerAccents(ctx, canvasW, canvasH);
+
   // Branding
-  drawBranding(ctx, canvasW, gridPixH + MARGIN * 2);
+  drawBranding(ctx, canvasW, gridPixH + MARGIN * 2, logo);
 
   // Write output files
   const buf = canvas.toBuffer('image/png');
