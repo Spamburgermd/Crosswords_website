@@ -57,7 +57,7 @@ function main() {
 
   let words: string[];
   try {
-    words = generateTargetsFromSeed(seed, 'core', 5);
+    words = generateTargetsFromSeed(seed, 5);
   } catch (err) {
     console.error('Word generation failed:', err);
     process.exit(1);

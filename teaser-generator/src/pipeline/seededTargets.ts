@@ -7,10 +7,7 @@
  */
 
 import { ALLOWED_WORD_LENGTHS } from './wordRules.js';
-import { canonicalizeDictionaryId, type DictionaryId } from './dictionaryAdapter.js';
-import commonWords from '../dictionary/wordlist_common_4_6.json' assert { type: 'json' };
-import modifiedWords from '../dictionary/wordlist_modified_4_6.json' assert { type: 'json' };
-import twlWords from '../dictionary/wordlist_twl_4_6.json' assert { type: 'json' };
+import coreWords from '../dictionary/tier_core_4_6.json' assert { type: 'json' };
 import { buildLocalPlacement } from './localPlacement.js';
 
 const TARGET_LENGTHS = [4, 4, 5, 5, 6] as const;
@@ -80,52 +77,31 @@ export function isBasicPluralCandidate(word: string, dictionaryWords: Set<string
   return false;
 }
 
-export function deriveRetrySeed(seed: number, dict: DictionaryId, attempt: number): number {
-  const canonical = canonicalizeDictionaryId(dict);
-  return hashString32(`${seed}:${canonical}:${attempt}`);
+export function deriveRetrySeed(seed: number, attempt: number): number {
+  return hashString32(`${seed}:core:${attempt}`);
 }
 
-const twlSet = new Set(twlWords as string[]);
-const advancedWords = (modifiedWords as string[]).filter((word) => twlSet.has(word));
-const juniorWords = (commonWords as string[]).filter((word) => word.length >= 3 && word.length <= 5);
-
-const WORDS_BY_DICT: Record<string, LengthMap> = {
-  common: buildLengthMap(commonWords as string[]),
-  modified: buildLengthMap(modifiedWords as string[]),
-  core: buildLengthMap(commonWords as string[]),
-  standard: buildLengthMap(modifiedWords as string[]),
-  advanced: buildLengthMap(advancedWords),
-  junior: buildLengthMap(juniorWords),
-  canon: buildLengthMap(twlWords as string[]),
-  twl: buildLengthMap(twlWords as string[]),
-};
-
-const WORD_SET_BY_DICT: Record<string, Set<string>> = Object.fromEntries(
-  Object.entries(WORDS_BY_DICT).map(([dictId, map]) => [dictId, buildWordSet(map)]),
-);
+const CORE_WORDS_BY_LENGTH = buildLengthMap(coreWords as string[]);
+const CORE_WORD_SET = buildWordSet(CORE_WORDS_BY_LENGTH);
 
 export function generateTargetsFromSeed(
   seed: number,
-  dict: DictionaryId,
   count = 5,
 ): string[] {
   const requiredLengths = TARGET_LENGTHS.slice(0, count);
-  const canonical = canonicalizeDictionaryId(dict);
-  const dictMap = WORDS_BY_DICT[canonical] ?? WORDS_BY_DICT['standard']!;
-  const dictWordSet = WORD_SET_BY_DICT[canonical] ?? WORD_SET_BY_DICT['standard']!;
 
   for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
-    const rng = mulberry32(deriveRetrySeed(seed, canonical, attempt));
+    const rng = mulberry32(deriveRetrySeed(seed, attempt));
     const picked: string[] = [];
     const used = new Set<string>();
     let failed = false;
 
     for (const len of requiredLengths) {
-      const pool = (dictMap[len] ?? []).filter(
-        (candidate) => !isBasicPluralCandidate(candidate, dictWordSet),
+      const pool = (CORE_WORDS_BY_LENGTH[len] ?? []).filter(
+        (candidate) => !isBasicPluralCandidate(candidate, CORE_WORD_SET),
       );
       if (pool.length === 0) {
-        throw new Error(`No eligible words of length ${len} in dictionary ${canonical}.`);
+        throw new Error(`No eligible core words of length ${len}.`);
       }
       let chosen: string | undefined;
       for (let tries = 0; tries < pool.length; tries++) {
@@ -150,5 +126,5 @@ export function generateTargetsFromSeed(
     if (placement.ok) return picked;
   }
 
-  throw new Error(`Failed to generate placeable targets after ${MAX_ATTEMPTS} attempts for dict=${canonical}.`);
+  throw new Error(`Failed to generate placeable core targets after ${MAX_ATTEMPTS} attempts.`);
 }

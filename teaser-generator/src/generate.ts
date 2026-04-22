@@ -7,10 +7,13 @@
  */
 
 import * as path from 'path';
+import * as fs from 'fs';
 import { getDailyPuzzleSeed }    from './pipeline/seedMath.js';
 import { generateTargetsFromSeed } from './pipeline/seededTargets.js';
 import { buildLocalPlacement }   from './pipeline/localPlacement.js';
 import { renderTeaser }          from './render-teaser.js';
+
+const ARCHIVE_RETENTION_COUNT = 10;
 
 function parseDate(): string {
   const args = process.argv.slice(2);
@@ -30,6 +33,18 @@ function parseDate(): string {
   return `${y}-${m}-${day}`;
 }
 
+function pruneArchiveHistory(archiveDir: string, keepCount: number): void {
+  if (!fs.existsSync(archiveDir)) return;
+
+  const datedPngs = fs.readdirSync(archiveDir)
+    .filter((name) => /^\d{4}-\d{2}-\d{2}\.png$/i.test(name))
+    .sort((a, b) => b.localeCompare(a));
+
+  for (const name of datedPngs.slice(keepCount)) {
+    fs.unlinkSync(path.join(archiveDir, name));
+  }
+}
+
 async function main(): Promise<void> {
   const dateStr = parseDate();
   const seed    = getDailyPuzzleSeed(dateStr);
@@ -42,7 +57,7 @@ async function main(): Promise<void> {
   // 1. Generate words
   let words: string[];
   try {
-    words = generateTargetsFromSeed(seed, 'core', 5);
+    words = generateTargetsFromSeed(seed, 5);
   } catch (err) {
     console.error('[teaser] Word generation failed:', err);
     process.exit(1);
@@ -60,7 +75,8 @@ async function main(): Promise<void> {
   // 3. Render
   const outputDir  = path.join(process.cwd(), 'output');
   const outputPath = path.join(outputDir, 'daily-teaser.png');
-  const archivePath = path.join(outputDir, 'archive', `${dateStr}.png`);
+  const archiveDir = path.join(outputDir, 'archive');
+  const archivePath = path.join(archiveDir, `${dateStr}.png`);
 
   const { tiles } = await renderTeaser({
     words:       placement.words,
@@ -69,6 +85,8 @@ async function main(): Promise<void> {
     outputPath,
     archivePath,
   });
+
+  pruneArchiveHistory(archiveDir, ARCHIVE_RETENTION_COUNT);
 
   // 4. Summary
   const feedbackLabel: Record<string, string> = {
