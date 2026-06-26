@@ -83,6 +83,14 @@ img { display: block; max-width: 100%; }
   display: block;
 }
 
+.nav-wordmark-text {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--text-primary);
+}
+
 .nav-brand-text {
   font-family: var(--font-body);
   font-size: 12px;
@@ -91,7 +99,8 @@ img { display: block; max-width: 100%; }
   color: var(--text-secondary);
 }
 
-.nav-brand-text .red { color: var(--red); }
+.nav-brand-text .red,
+.nav-wordmark-text .red { color: var(--red); }
 
 .nav-links {
   display: flex;
@@ -173,16 +182,31 @@ img { display: block; max-width: 100%; }
   filter: brightness(0) saturate(100%) invert(13%) sepia(95%) saturate(5782%) hue-rotate(350deg) brightness(94%);
 }
 
-/* Wordmark — white bg blends seamlessly now */
+/* SVG wordmark — text layer filters to black on hover, sword always red */
 .hero-wordmark {
+  position: relative;
   width: 100%;
   max-width: 500px;
 }
 
-.hero-wordmark img {
+.hero-wordmark-text {
   display: block;
   width: 100%;
   height: auto;
+  transition: filter 0.4s ease;
+}
+
+.hero-wordmark:hover .hero-wordmark-text {
+  filter: brightness(0);
+}
+
+.hero-wordmark-sword {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
 }
 
 /* Three dots — echo the splash screen pager */

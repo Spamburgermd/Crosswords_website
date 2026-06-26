@@ -12,7 +12,7 @@ export default function Nav() {
   return (
     <nav className={`nav${scrolled ? ' scrolled' : ''}`} id="nav">
       <a href="#" className="nav-brand">
-        <img src="/assets/icons/CrosswordsCinzel1.png" alt="CrosSwordS" className="nav-wordmark" />
+        <span className="nav-wordmark-text">CRO<span className="red">X</span>WORDS</span>
       </a>
       <div className="nav-links">
         <a href="#how-it-works">How It Works</a>

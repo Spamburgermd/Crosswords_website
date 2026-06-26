@@ -14,9 +14,19 @@ export default function Hero() {
           <img src="/assets/icons/cw-motif-red.png" alt="CrosSwordS motif" />
         </div>
 
-        {/* Calligraphic wordmark — white bg blends with page */}
+        {/* SVG wordmark — text filters to black on hover, sword always red */}
         <div className="hero-wordmark">
-          <img src="/assets/icons/CrosswordsBlackRedBent90.png" alt="CrosSwordS" />
+          <img
+            className="hero-wordmark-text"
+            src="/assets/icons/croxwords-text.svg"
+            alt="CroXwordS"
+          />
+          <img
+            className="hero-wordmark-sword"
+            src="/assets/icons/croxwords-sword.svg"
+            alt=""
+            aria-hidden="true"
+          />
         </div>
 
         {/* Three dots — echo the splash screen pager */}
