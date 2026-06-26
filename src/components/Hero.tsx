@@ -51,13 +51,6 @@ export default function Hero() {
           />
         </div>
 
-        {/* Three dots — cycle active dot with tagline */}
-        <div className="hero-dots">
-          {taglines.map((_, i) => (
-            <div key={i} className={`hero-dot${i === index ? ' active' : ''}`}></div>
-          ))}
-        </div>
-
         <div className={`hero-tagline${visible ? '' : ' hero-tagline-hidden'}`}>
           {taglines[index]}
         </div>
