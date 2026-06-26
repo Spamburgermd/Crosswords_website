@@ -14,7 +14,7 @@ export default function CTA() {
       <div className="cta-content">
         <img className="cta-motif reveal" src="/assets/icons/cw-motif-red.png" alt="CrosSwordS" />
         <h2 className="reveal">Ready to <span className="red">play</span>?</h2>
-        <p className="reveal">$4.99. No subscriptions. No ads. Just the game.</p>
+        <p className="reveal">$2.99. No subscriptions. No ads. Just the game.</p>
         <div className="cta-buttons reveal">
           <a href="#" className="btn-primary">
             <GooglePlayIcon />
